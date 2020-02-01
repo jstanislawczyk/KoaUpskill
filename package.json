@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "Koa.js upskill",
   "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "serve": "ts-node ./src/app.ts",
+    "start": "nodemon ./src/app.ts",
+    "test": "mocha 'test/**/*.js'",
+    "lint": "tslint --project tsconfig.json --format stylish"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "class-transformer": "^0.2.3",
@@ -20,10 +27,13 @@
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.0",
     "@types/node": "^13.7.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "http-status-codes": "^1.4.0",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^8.0.6",
+    "mocha": "^7.0.1",
     "nodemon": "^2.0.2",
     "pg": "^7.18.1",
     "reflect-metadata": "^0.1.13",
@@ -32,13 +42,6 @@
     "tslint-config-airbnb": "^5.11.2",
     "typeorm": "^0.2.22",
     "typescript": "^3.7.5"
-  },
-  "scripts": { 
-    "build": "tsc", 
-    "serve": "ts-node src/server.ts", 
-    "start": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "tslint --project tsconfig.json --format stylish"
   },
   "repository": {
     "type": "git",
