@@ -7,7 +7,7 @@
     "build": "tsc",
     "serve": "ts-node ./src/app.ts",
     "start": "nodemon ./src/app.ts",
-    "test": "mocha 'test/**/*.js'",
+    "test": "mocha -r ts-node/register 'test/**/*.ts'",
     "lint": "tslint --project tsconfig.json --format stylish"
   },
   "dependencies": {
@@ -22,10 +22,12 @@
     "typedi": "^0.8.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.8",
     "@types/http-status-codes": "^1.2.0",
     "@types/koa": "^2.11.0",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.0",
+    "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
@@ -41,7 +43,8 @@
     "tslint": "^6.0.0",
     "tslint-config-airbnb": "^5.11.2",
     "typeorm": "^0.2.22",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "typings": "^2.1.1"
   },
   "repository": {
     "type": "git",

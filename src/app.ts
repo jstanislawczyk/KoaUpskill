@@ -9,7 +9,7 @@ useContainer(Container);
 
 const app = createKoaServer({
     controllers: [__dirname + "/controller/*.ts"],
-   routePrefix: '/api',
+    routePrefix: '/api',
 });
 
 app.listen(port, () => {
