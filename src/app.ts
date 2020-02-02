@@ -1,19 +1,24 @@
 import 'reflect-metadata';
 import { createKoaServer, useContainer } from 'routing-controllers';
-import { Container } from "typedi";
-
-const appName = require('./../package').name;
-const port = 8080;
+import { Container } from 'typedi';
+import { createConnection } from 'typeorm';
 
 useContainer(Container);
 
-const app = createKoaServer({
-    controllers: [__dirname + "/controller/*.ts"],
-    routePrefix: '/api',
-});
+createConnection()
+    .then(async connection => {
+        const appName = require('./../package').name;
+        const port = 3000;
 
-app.listen(port, () => {
-    console.log(`${appName} server runs on port ${port}`)
-});
+        const app = createKoaServer({
+            controllers: [__dirname + '/controller/*.ts'],
+            routePrefix: '/api',
+        });
 
-module.exports = app;
+        app.listen(port, () => {
+            console.log(`${appName} server runs on port ${port}`)
+        });
+    })
+    .catch(error => 
+        console.log(`TypeORM connection error: ${error}`)
+    );

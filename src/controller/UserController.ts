@@ -1,34 +1,47 @@
-import { Controller, Param, Body, Get, Post, Put, Delete, HttpCode } from 'routing-controllers';
+import { JsonController, Param, Body, Get, Post, Patch, Delete, HttpCode } from 'routing-controllers';
+import { getManager } from 'typeorm';
+import { User } from '../entity/User';
 
-const usersPrefix = '/users';
+const userRepository = getManager().getRepository(User);
 
-@Controller()
+@JsonController('/users')
 export class UserController {
 
-    @Get(usersPrefix)
-    getAll() {
-       return 'This action returns all users';
-    }
+   @Get()
+   async getAllUsers() {
+      return await userRepository.find();
+   }
 
-    @Get(`${usersPrefix}/:id`)
-    getOne(@Param('id') id: number) {
-       return `This action returns user id=${id}`;
-    }
+   @Get('/:id')
+   async getOneUser(@Param('id') id: string) {
+      return await userRepository
+         .findOne(id)
+         .catch(() => `User with id=${id} not found`);
+   }
 
-    @Post(usersPrefix)
-    @HttpCode(201)
-    post(@Body() user: any) {
-       return 'Saving user...';
-    }
+   @Post()
+   @HttpCode(201)
+   async saveUser(@Body({ validate: true }) user: User) {
+      return await userRepository.save(user);
+   }
 
-    @Put(`${usersPrefix}/:id`)
-    put(@Param('id') id: number, @Body() user: any) {
-       return 'Updating a user...';
-    }
+   @Patch('/:id')
+   async updateUser(@Param('id') id: string, @Body() newUser: User) {
+      const userToUpdate = <User> await userRepository
+         .findOne(id)
+         .catch(() => `User with id=${id} not found`);
 
-    @Delete(`${usersPrefix}/:id`)
-    @HttpCode(204)
-    remove(@Param('id') id: number) {
-       return 'Removing user...';
-    }
+      userToUpdate.name = newUser.name;
+      userToUpdate.age = newUser.age;
+
+      return await userRepository.save(userToUpdate);
+   }
+
+   @Delete('/:id')
+   @HttpCode(204)
+   async remove(@Param('id') id: string) {
+      return await userRepository
+         .delete(id)
+         .catch(() => `User with id=${id} not found`);
+   }
 }
