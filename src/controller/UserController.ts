@@ -1,5 +1,5 @@
 import { JsonController, Param, Body, Get, Post, Patch, Delete, HttpCode } from 'routing-controllers';
-import { InjectRepository } from "typeorm-typedi-extensions";
+import { InjectRepository } from 'typeorm-typedi-extensions';
 import { User } from '../entity/User';
 import { UserRepository } from '../repository/UserRepository';
 

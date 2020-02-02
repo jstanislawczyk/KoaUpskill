@@ -15,8 +15,9 @@
       "src/subscriber/**/*.ts"
    ],
    "cli": {
-   "entitiesDir": "src/entity",
-   "migrationsDir": "src/migration",
-   "subscribersDir": "src/subscriber"
-   }
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+   },
+   "useUnifiedTopology": true
 }

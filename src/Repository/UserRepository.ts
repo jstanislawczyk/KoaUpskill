@@ -1,4 +1,4 @@
-import { MongoRepository, EntityRepository , DeleteResult, DeepPartial } from 'typeorm';
+import { MongoRepository, EntityRepository } from 'typeorm';
 import { Service } from 'typedi';
 import { User } from '../entity/User';
 
