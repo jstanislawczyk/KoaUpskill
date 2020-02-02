@@ -1,51 +1,45 @@
-import { JsonController, Param, Body, Get, Post, Patch, Delete, HttpCode } from 'routing-controllers';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import { JsonController, Param, Body, Get, Post, Patch, Delete, HttpCode, NotFoundError } from 'routing-controllers';
 import { User } from '../entity/User';
-import { UserRepository } from '../repository/UserRepository';
+import { UserService } from '../service/UserService';
 
 @JsonController('/users')
 export class UserController {
 
-   constructor(
-      @InjectRepository()
-      private readonly userRepository: UserRepository,
-   ) {}
+   constructor(private readonly userService: UserService) {
+   }
 
    @Get()
    async getAllUsers() {
-      return await this.userRepository.find();
+      return await this.userService.getAllUsers();
    }
 
    @Get('/:id')
-   async getOneUser(@Param('id') id: string) {
-      return await this.userRepository
-         .findOne(id)
-         .catch(() => `User with id=${id} not found`);
+   async findOneUser(@Param('id') id: string) {
+      return await this.userService
+         .findOneUser(id)
+         .catch(() => {
+            throw new NotFoundError(`User with id=${id} not found`)
+         });
    }
 
    @Post()
    @HttpCode(201)
    async saveUser(@Body({ validate: true }) user: User) {
-      return await this.userRepository.save(user);
+      return await this.userService.saveUser(user);
    }
 
    @Patch('/:id')
    async updateUser(@Param('id') id: string, @Body() newUser: User) {
-      const userToUpdate = <User> await this.userRepository
-         .findOne(id)
-         .catch(() => `User with id=${id} not found`);
-
-      userToUpdate.name = newUser.name;
-      userToUpdate.age = newUser.age;
-
-      return await this.userRepository.save(userToUpdate);
+      return await this.userService.updateUser(id, newUser);
    }
 
    @Delete('/:id')
    @HttpCode(204)
-   async remove(@Param('id') id: string) {
-      return await this.userRepository
-         .delete(id)
-         .catch(() => `User with id=${id} not found`);
+   async deleteUser(@Param('id') id: string) {
+      return await this.userService
+         .deleteUser(id)
+         .catch(() => {
+            throw new NotFoundError(`User with id=${id} not found`)
+         });
    }
 }
