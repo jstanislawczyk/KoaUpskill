@@ -11,18 +11,21 @@
     "lint": "tslint --project tsconfig.json --format stylish"
   },
   "dependencies": {
+    "@types/koa-logger": "^3.1.1",
     "@types/mongodb": "^3.3.15",
     "@types/mongoose": "^5.7.0",
     "body-parser": "^1.19.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.0",
     "express": "^4.17.1",
+    "koa-logger": "^3.2.1",
     "koa-multer": "^1.0.2",
     "log4js": "^6.1.1",
     "mongoose": "^5.8.11",
     "multer": "^1.4.2",
     "routing-controllers": "^0.8.0",
-    "typedi": "^0.8.0"
+    "typedi": "^0.8.0",
+    "typeorm-typedi-extensions": "^0.2.3"
   },
   "devDependencies": {
     "@types/chai": "^4.2.8",

@@ -1,20 +1,24 @@
 import { JsonController, Param, Body, Get, Post, Patch, Delete, HttpCode } from 'routing-controllers';
-import { getManager } from 'typeorm';
+import { InjectRepository } from "typeorm-typedi-extensions";
 import { User } from '../entity/User';
-
-const userRepository = getManager().getRepository(User);
+import { UserRepository } from '../repository/UserRepository';
 
 @JsonController('/users')
 export class UserController {
 
+   constructor(
+      @InjectRepository()
+      private readonly userRepository: UserRepository,
+   ) {}
+
    @Get()
    async getAllUsers() {
-      return await userRepository.find();
+      return await this.userRepository.find();
    }
 
    @Get('/:id')
    async getOneUser(@Param('id') id: string) {
-      return await userRepository
+      return await this.userRepository
          .findOne(id)
          .catch(() => `User with id=${id} not found`);
    }
@@ -22,25 +26,25 @@ export class UserController {
    @Post()
    @HttpCode(201)
    async saveUser(@Body({ validate: true }) user: User) {
-      return await userRepository.save(user);
+      return await this.userRepository.save(user);
    }
 
    @Patch('/:id')
    async updateUser(@Param('id') id: string, @Body() newUser: User) {
-      const userToUpdate = <User> await userRepository
+      const userToUpdate = <User> await this.userRepository
          .findOne(id)
          .catch(() => `User with id=${id} not found`);
 
       userToUpdate.name = newUser.name;
       userToUpdate.age = newUser.age;
 
-      return await userRepository.save(userToUpdate);
+      return await this.userRepository.save(userToUpdate);
    }
 
    @Delete('/:id')
    @HttpCode(204)
    async remove(@Param('id') id: string) {
-      return await userRepository
+      return await this.userRepository
          .delete(id)
          .catch(() => `User with id=${id} not found`);
    }
