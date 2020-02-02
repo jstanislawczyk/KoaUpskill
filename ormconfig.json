@@ -3,6 +3,7 @@
    "host": "localhost",
    "database": "koajs",
    "port": 27017,
+   "dropSchema": true,
    "synchronize": true,
    "logging": true,
    "entities": [
