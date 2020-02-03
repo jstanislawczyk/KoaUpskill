@@ -1,6 +1,6 @@
 import { User } from '../../src/entity/User';
 import * as chai from 'chai';
-import chaiHttp = require("chai-http");
+import chaiHttp = require('chai-http');
 import 'mocha'; 
 import 'reflect-metadata';
 
