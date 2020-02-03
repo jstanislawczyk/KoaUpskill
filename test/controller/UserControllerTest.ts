@@ -1,12 +1,11 @@
 import { User } from '../../src/entity/User';
+import * as chai from 'chai';
+import chaiHttp = require("chai-http");
 import 'mocha'; 
 import 'reflect-metadata';
 
 const serverAddress = 'http://localhost:3000';
 const usersRequestPath = '/api/users';
-
-const chai = require("chai");
-const chaiHttp = require("chai-http");
 const { expect } = chai;
 
 chai.use(chaiHttp);
@@ -40,7 +39,7 @@ describe('Users', () => {
                 expect(res).to.have.status(200);
                 expect(res.body)
                     .to.be.an.instanceof(Array)
-                    .and.to.have.property(0)
+                    .and.to.have.property('0')
                     .that.includes.all.keys([ 'id', 'name', 'age' ])
                     .to.include(newUserForTest);
 
