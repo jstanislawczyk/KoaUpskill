@@ -6,14 +6,16 @@
   "scripts": {
     "build": "tsc",
     "serve": "ts-node ./src/app.ts",
-    "start": "nodemon ./src/app.ts",
-    "test": "mocha -r ts-node/register 'test/**/*.ts'",
+    "start": "set NODE_ENV=development&&nodemon ./src/app.ts",
+    "test": "set NODE_ENV=test&&mocha -r ts-node/register 'test/**/*.ts'",
     "lint": "tslint --project tsconfig.json --format stylish"
   },
   "dependencies": {
+    "@types/config": "0.0.36",
     "body-parser": "^1.19.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.0",
+    "config": "^3.2.5",
     "express": "^4.17.1",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
