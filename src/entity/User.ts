@@ -1,19 +1,26 @@
 import { Entity, Column, ObjectID, ObjectIdColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { validateOrReject, IsDefined } from 'class-validator';
+import { validateOrReject, IsDefined, Length } from 'class-validator';
+import { UserRole } from '../enum/UserRole';
 
 @Entity()
 export class User {
-  
+
   @ObjectIdColumn()
   id: ObjectID;
   
-  @Column({ length: 100 })
+  @Column()
   @IsDefined()
-  name: string;
+  @Length(2, 60)
+  firstName: string;
+
+  @Column()
+  @IsDefined()
+  @Length(2, 60)
+  lastName: string;
   
   @Column()
   @IsDefined()
-  age: number;
+  role: UserRole;
 
   @BeforeInsert()
   @BeforeUpdate()
