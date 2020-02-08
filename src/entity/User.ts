@@ -1,5 +1,5 @@
 import { Entity, Column, ObjectID, ObjectIdColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { validateOrReject, IsDefined, Length } from 'class-validator';
+import { validateOrReject, IsDefined, Length, IsEnum } from 'class-validator';
 import { UserRole } from '../enum/UserRole';
 
 @Entity()
@@ -20,6 +20,7 @@ export class User {
   
   @Column()
   @IsDefined()
+  @IsEnum(UserRole)
   role: UserRole;
 
   @BeforeInsert()
