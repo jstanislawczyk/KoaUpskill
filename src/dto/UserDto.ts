@@ -1,4 +1,4 @@
-import { ObjectID, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { ObjectID } from 'typeorm';
 import { validateOrReject, Length, IsEnum } from 'class-validator';
 import { UserRole } from '../enum/UserRole';
 
@@ -15,8 +15,6 @@ export class UserDto {
     @IsEnum(UserRole)
     role: UserRole;
 
-    @BeforeInsert()
-    @BeforeUpdate()
     async validate() {
       await validateOrReject(this);
     }
