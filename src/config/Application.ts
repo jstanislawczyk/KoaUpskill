@@ -3,8 +3,9 @@ import { createKoaServer, useContainer } from 'routing-controllers';
 import { createConnection, useContainer as useTypeOrmContainer, Connection } from 'typeorm';
 import { Container } from 'typedi';
 import { DatabaseConfig } from '../config/DatabaseConfig';
-import * as koaLogger from 'koa-logger';
 import * as config from 'config';
+import { Logger } from './Logger';
+import { LoggerLevel } from '../enum/LoggerLevel';
 
 export class Application {
     public databaseConnection: Connection;
@@ -23,17 +24,16 @@ export class Application {
                 const appName = config.get('app.name');
                 const app = createKoaServer({
                     controllers: [__dirname + '/../controller/*.ts'],
+                    middlewares: [__dirname + '/../middleware/*.ts'],
                     routePrefix: '/api',
                 });
 
-                app.use(koaLogger());
-
                 app.listen(port, () => {
-                    console.log(`${appName} server runs on port ${port}`)
+                    Logger.log(`${appName} server runs on port ${port}`);
                 });
             })
             .catch(error => 
-                console.log(`TypeORM connection error: ${error}`)
+                Logger.log(`TypeORM connection error: ${error}`, LoggerLevel.ERROR)
             );
     }
 
