@@ -26,6 +26,7 @@ export class Application {
                     controllers: [__dirname + '/../controller/*.ts'],
                     middlewares: [__dirname + '/../middleware/*.ts'],
                     routePrefix: '/api',
+                    defaultErrorHandler: false,
                 });
 
                 app.listen(port, () => {
