@@ -1,5 +1,5 @@
 import { Middleware, KoaMiddlewareInterface, Ctx, UseAfter } from 'routing-controllers';
-import { Context } from "vm";
+import { Context } from 'vm';
 import { RequestLogMiddleware } from './RequestLogMiddleware';
 import { Logger } from '../config/Logger';
 import { Error } from '../exception/Error';
@@ -12,12 +12,12 @@ export class ErrorHandlerMiddleware implements KoaMiddlewareInterface {
 
     return await next().catch(error => {
       const errorBody = new Error();
-      errorBody.code = error.httpCode;
+      errorBody.code = error.httpCode || 500;
       errorBody.message = error.message;
 
       Logger.log(`${context.method} ${context.url} | ${context.status} ${context.message}`);
 
-      return context.throw(error.httpCode || 500, errorBody.toJson()); 
+      return context.throw(errorBody.code, errorBody.toJson()); 
     });
   }
 }

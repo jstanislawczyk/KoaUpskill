@@ -21,10 +21,10 @@ export class DatabaseConfig {
                 'src/entity/**/*.ts',
             ],
             migrations: [
-            'src/migration/**/*.ts',
+                'src/migration/**/*.ts',
             ],
             subscribers: [
-            'src/subscriber/**/*.ts',
+                'src/subscriber/**/*.ts',
             ],
             cli: {
             entitiesDir: 'src/entity',
