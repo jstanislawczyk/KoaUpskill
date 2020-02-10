@@ -12,8 +12,12 @@ export class UserController {
    }
 
    @Get()
-   async getAllUsers(): Promise<User[]> {
-      return await this.userService.getAllUsers();
+   async getAllUsers(): Promise<UserDto[]> {
+      return await this.userService
+         .getAllUsers()
+         .then(users => 
+            UserDtoConverter.toListOfDtos(users)
+         );
    }
 
    @Get('/:id')

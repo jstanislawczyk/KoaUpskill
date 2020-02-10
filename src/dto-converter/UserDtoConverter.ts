@@ -5,7 +5,9 @@ export class UserDtoConverter {
     public static toDto(user: User): UserDto {
         const newUserDto = new UserDto();
 
-        newUserDto.id = user.id;
+        newUserDto.id = user.id 
+            ? user.id.toHexString() 
+            : '';
         newUserDto.firstName = user.firstName;
         newUserDto.lastName = user.lastName;
         newUserDto.role = user.role;
@@ -13,15 +15,14 @@ export class UserDtoConverter {
         return newUserDto;
     }
 
-    public static toEntity(user: User): UserDto {
-        const newUserDto = new UserDto();
+    public static toEntity(userDto: UserDto): User {
+        const newUser = new User();
         
-        newUserDto.id = user.id;
-        newUserDto.firstName = user.firstName;
-        newUserDto.lastName = user.lastName;
-        newUserDto.role = user.role;
+        newUser.firstName = userDto.firstName;
+        newUser.lastName = userDto.lastName;
+        newUser.role = userDto.role;
 
-        return newUserDto;
+        return newUser;
     }
 
     public static toListOfDtos(users: User[]): UserDto[] {

@@ -1,10 +1,9 @@
-import { ObjectID } from 'typeorm';
 import { validateOrReject, Length, IsEnum } from 'class-validator';
 import { UserRole } from '../enum/UserRole';
 
 export class UserDto {
 
-    id: ObjectID;
+    id: string;
   
     @Length(2, 60)
     firstName: string;
