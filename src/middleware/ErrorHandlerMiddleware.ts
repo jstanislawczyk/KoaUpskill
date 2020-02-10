@@ -17,7 +17,7 @@ export class ErrorHandlerMiddleware implements KoaMiddlewareInterface {
 
       Logger.log(`${context.method} ${context.url} | ${context.status} ${context.message}`);
 
-      return context.throw(error.httpCode, errorBody.toJson()); 
+      return context.throw(error.httpCode || 500, errorBody.toJson()); 
     });
   }
 }
