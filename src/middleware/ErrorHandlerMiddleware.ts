@@ -1,10 +1,8 @@
 import { Middleware, KoaMiddlewareInterface, Ctx, UseAfter } from 'routing-controllers';
 import { Context } from 'vm';
-import { RequestLogMiddleware } from './RequestLogMiddleware';
 import { Logger } from '../config/Logger';
 import { Error } from '../exception/Error';
 
-@UseAfter(RequestLogMiddleware)
 @Middleware({ type: 'before' })
 export class ErrorHandlerMiddleware implements KoaMiddlewareInterface {
 
