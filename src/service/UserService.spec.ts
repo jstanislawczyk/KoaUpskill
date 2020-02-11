@@ -32,6 +32,21 @@ describe('Users service', () => {
 
         assert.deepEqual(await userService.findOneUser('Som3ID'), getUser());
     });
+
+    it('updateUser()', async () => {
+        const userRepository: UserRepository = new UserRepository();
+        const userService: UserService = new UserService(userRepository);
+
+        const updatedUser: User = getUser();
+        updatedUser.firstName = 'UpdatedFirstName';
+        updatedUser.lastName = 'UpdatedLastName';
+        updatedUser.role = UserRole.MANAGER;
+
+        sinon.stub(userRepository, 'findOne' as any).resolves(getUser());
+        sinon.stub(userRepository, 'save' as any).resolves(updatedUser);
+
+        assert.deepEqual(await userService.saveUser(updatedUser), updatedUser);
+    });
 });
 
 function getMultipleUsers(): User[] {
