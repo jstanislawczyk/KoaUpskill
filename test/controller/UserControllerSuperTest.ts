@@ -5,10 +5,10 @@ const application: Application = new Application();
 const applicationStartContext = application.start()
 
 describe('GET /api/users', () => {
-    it('respond with json containing a list of all users', async (done) => {
+    it('respond with json containing a list of all users', async (done: Mocha.Done) => {
         await applicationStartContext;
 
-        request(application.app)
+        request(application.appContext)
             .get('/api/users')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
