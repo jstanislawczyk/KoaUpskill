@@ -7,6 +7,10 @@
         "host": "localhost",
         "port": 27017,
         "name": "koajs",
-        "dropSchema": false
+        "dropSchema": false,
+        "loggerActive": true
+    },
+    "logger": {
+        "loggerActive": true
     }
 }
