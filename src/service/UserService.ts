@@ -28,7 +28,7 @@ export class UserService {
     async updateUser(id: string, newUser: User): Promise<User> {
         return <User> await this.userRepository
             .findOne(id)
-            .then(userToUpdate => {
+            .then((userToUpdate: User) => {
                 userToUpdate.firstName = newUser.firstName ? newUser.firstName : userToUpdate.firstName;
                 userToUpdate.lastName = newUser.lastName ? newUser.lastName : userToUpdate.lastName;
                 userToUpdate.role = newUser.role ? newUser.role : userToUpdate.role;
@@ -41,6 +41,13 @@ export class UserService {
     }
 
     async deleteUser(id: string): Promise<DeleteResult> {
-        return await this.userRepository.delete(id);
+        return <DeleteResult> await this.userRepository
+            .findOne(id)
+            .then((userToDelete: User) => 
+                this.userRepository.delete(userToDelete.id)
+            )
+            .catch(() => {
+                throw new NotFoundError(`User with id=${id} not found`);
+            });
     }
 }
