@@ -8,5 +8,8 @@
         "port": 27017,
         "name": "koajs",
         "dropSchema": false
+    },
+    "logger": {
+        "loggerActive": true
     }
 }

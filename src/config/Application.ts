@@ -9,6 +9,7 @@ import { LoggerLevel } from '../enum/LoggerLevel';
 
 export class Application {
     public databaseConnection: Connection;
+    public appContext: any;
 
     public async start(): Promise<void> {
         const databaseConfig = DatabaseConfig.getDatabaseConnectionConfiguration();
@@ -29,7 +30,7 @@ export class Application {
                     defaultErrorHandler: false,
                 });
 
-                app.listen(port, () => {
+                this.appContext = app.listen(port, () => {
                     Logger.log(`${appName} server runs on port ${port}`);
                 });
             })
