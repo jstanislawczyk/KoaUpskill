@@ -25,7 +25,7 @@ export class SupplierService {
         return await this.supplierRepository.save(supplier);
     }
 
-    async updateUser(id: string, newSupplier: Supplier): Promise<Supplier> {
+    async updateSupplier(id: string, newSupplier: Supplier): Promise<Supplier> {
         return <Supplier> await this.supplierRepository
             .findOne(id)
             .then((supplierToUpdate: Supplier) => {

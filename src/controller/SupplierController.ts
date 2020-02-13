@@ -49,7 +49,7 @@ export class SupplierController {
         const newUser: Supplier = SupplierDtoConverter.toEntity(supplierDto);
 
         return await this.supplierService
-            .updateUser(id, newUser)
+            .updateSupplier(id, newUser)
             .then((user: Supplier) => 
                 SupplierDtoConverter.toDto(user)
             );
