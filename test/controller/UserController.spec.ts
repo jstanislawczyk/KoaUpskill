@@ -168,7 +168,7 @@ describe('Users controller integration test', () => {
     });
 
     describe('PATCH /api/user/{id}', () => {
-        it('respond with message about user not found', async () => {
+        it('respond with json containing updated user', async () => {
             const userBodyForUpdate: User = UserDataGenerator.createUser('Jane', 'Test', UserRole.ADMIN);
             let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
 
