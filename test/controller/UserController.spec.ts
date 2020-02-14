@@ -13,12 +13,14 @@ import { Error } from '../../src/exception/Error';
 import { ErrorDataGenerator } from '../../src/util/data-generator/ErrorDataGenerator';
 
 const application: Application = new Application();
-const applicationStartContext = application.start();
 
 describe('Users controller integration test', () => {
-    beforeEach(async () => {
-        await applicationStartContext;
 
+    before(async () => {
+        await application.start();
+    })
+
+    beforeEach(async () => {
         return await application.databaseConnection
             .synchronize(true)
             .catch(error => 
@@ -27,9 +29,7 @@ describe('Users controller integration test', () => {
     });
 
     after(async () => {
-        await applicationStartContext;
-
-        return await application.databaseConnection.close();
+        return application.close();
     });
 
     describe('GET /api/users', () => {

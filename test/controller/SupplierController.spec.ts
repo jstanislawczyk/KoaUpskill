@@ -15,12 +15,14 @@ import { SupplierDtoConverter } from '../../src/dto-converter/SupplierDtoConvert
 import { SupplierDto } from '../../src/dto/SupplierDto';
 
 const application: Application = new Application();
-const applicationStartContext = application.start();
 
 describe('Suppliers controller integration test', () => {
-    beforeEach(async () => {
-        await applicationStartContext;
 
+    before(async () => {
+        await application.start();
+    })
+
+    beforeEach(async () => {
         return await application.databaseConnection
             .synchronize(true)
             .catch(error => 
@@ -29,9 +31,7 @@ describe('Suppliers controller integration test', () => {
     });
 
     after(async () => {
-        await applicationStartContext;
-
-        return await application.databaseConnection.close();
+        return application.close();
     });
 
     describe('GET /api/suppliers', () => {

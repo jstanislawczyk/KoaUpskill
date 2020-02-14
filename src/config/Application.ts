@@ -41,5 +41,6 @@ export class Application {
 
     public close(): void {
         this.databaseConnection.close();
+        this.appContext.close();
     }
 }
