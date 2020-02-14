@@ -128,7 +128,7 @@ describe('Users controller integration test', () => {
                 .then((response: any) => {
                     const savedUserDto: UserDto = JSON.parse(response.text);
                     
-                    assert.isNotNull(savedUserDto.firstName);
+                    assert.isNotNull(savedUserDto.id);
                     assert.equal(savedUserDto.firstName, expectedUserDto.firstName);
                     assert.equal(savedUserDto.lastName, expectedUserDto.lastName);
                     assert.equal(savedUserDto.role, expectedUserDto.role);
@@ -156,7 +156,7 @@ describe('Users controller integration test', () => {
     });
 
     describe('PATCH /api/user/{id} BAD REQUEST', () => {
-        it('respond with message about user not found', async () => {
+        it('respond with message about user bad request', async () => {
             const user: User = UserDataGenerator.createUser('John', '', UserRole.MANAGER);
             
             return request(application.appContext)
