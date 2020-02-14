@@ -5,7 +5,7 @@ import { Supplier } from '../entity/Supplier';
 import { SupplierDto } from '../dto/SupplierDto';
 import { SupplierDtoConverter } from '../dto-converter/SupplierDtoConverter';
 
-@JsonController('/supplier')
+@JsonController('/suppliers')
 export class SupplierController {
 
     constructor(private readonly supplierService: SupplierService) {
