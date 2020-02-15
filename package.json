@@ -7,7 +7,7 @@
     "build": "tsc",
     "serve": "ts-node ./src/app.ts",
     "start": "set NODE_ENV=development&&nodemon ./src/app.ts",
-    "test": "set NODE_ENV=test&&mocha -r ts-node/register './**/*.spec.ts'",
+    "test": "set NODE_ENV=test&&mocha -r ts-node/register './**/*.spec.ts' --exit --timeout 10000",
     "lint": "tslint --project tsconfig.json --format stylish"
   },
   "dependencies": {

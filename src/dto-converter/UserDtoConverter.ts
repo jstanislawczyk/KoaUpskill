@@ -1,5 +1,6 @@
 import { UserDto } from '../dto/UserDto';
 import { User } from '../entity/User';
+
 export class UserDtoConverter {
 
     public static toDto(user: User): UserDto {
