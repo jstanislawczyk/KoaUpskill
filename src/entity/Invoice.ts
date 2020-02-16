@@ -1,7 +1,8 @@
 import { Entity, Column, ObjectID, ObjectIdColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { validateOrReject, IsDefined, IsEnum, IsDate } from 'class-validator';
+import { validateOrReject, IsDefined, IsEnum, IsDateString, ValidateNested } from 'class-validator';
 import { InvoiceStatus } from '../enum/InvoiceStatus';
 import { Merchandise } from './Merchandise';
+import { Type } from 'class-transformer';
 
 @Entity()
 export class Invoice {
@@ -10,7 +11,7 @@ export class Invoice {
     id: ObjectID;
     
     @Column()
-    @IsDate()
+    @IsDateString()
     @IsDefined()
     dateOfInvoice: Date;
 
@@ -29,6 +30,8 @@ export class Invoice {
 
     @Column()
     @IsDefined()
+    @ValidateNested({ each: true })
+    @Type(() => Merchandise)
     merchandises: Merchandise[];
 
     @BeforeInsert()
