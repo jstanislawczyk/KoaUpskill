@@ -40,7 +40,11 @@ export class Application {
     }
 
     public close(): void {
+        const appName = config.get('app.name');
+
         this.databaseConnection.close();
         this.appContext.close();
+
+        Logger.log(`${appName} server stopped`);
     }
 }
