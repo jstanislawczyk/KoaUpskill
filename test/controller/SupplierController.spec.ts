@@ -6,11 +6,11 @@ import { UserRole } from '../../src/enum/UserRole';
 import { User } from '../../src/entity/User';
 import { Logger } from '../../src/config/Logger';
 import { LoggerLevel } from '../../src/enum/LoggerLevel';
-import { UserDataGenerator } from '../../src/util/data-generator/UserDataGenerator';
+import { UserDataGenerator } from '../util/data-generator/UserDataGenerator';
 import { Error } from '../../src/exception/Error';
-import { ErrorDataGenerator } from '../../src/util/data-generator/ErrorDataGenerator';
+import { ErrorDataGenerator } from '../util/data-generator/ErrorDataGenerator';
 import { Supplier } from '../../src/entity/Supplier';
-import { SupplierDataGenerator } from '../../src/util/data-generator/SupplierDataGenerator';
+import { SupplierDataGenerator } from '../util/data-generator/SupplierDataGenerator';
 import { SupplierDtoConverter } from '../../src/dto-converter/SupplierDtoConverter';
 import { SupplierDto } from '../../src/dto/SupplierDto';
 
@@ -20,7 +20,7 @@ describe('Suppliers controller integration test', () => {
 
     before(async () => {
         await application.start();
-    })
+    });
 
     beforeEach(async () => {
         return await application.databaseConnection

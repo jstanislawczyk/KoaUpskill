@@ -1,6 +1,6 @@
-import { User } from "../../entity/User";
-import { UserRole } from "../../enum/UserRole";
-import { UserDto } from "../../dto/UserDto";
+import { User } from "../../../src/entity/User";
+import { UserRole } from "../../../src/enum/UserRole";
+import { UserDto } from "../../../src/dto/UserDto";
 
 export class UserDataGenerator {
     public static createUser(firstName: string, lastName: string, role: UserRole): User {
