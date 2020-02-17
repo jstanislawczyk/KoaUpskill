@@ -49,7 +49,7 @@ const createTestSupplier = (name: string, nip: string): Supplier => {
     supplier.nip = nip;
 
     return supplier;
-}
+};
 
 const createTestSupplierDto = (name: string, nip: string): SupplierDto => {
     const supplierDto = new SupplierDto();
@@ -59,4 +59,4 @@ const createTestSupplierDto = (name: string, nip: string): SupplierDto => {
     supplierDto.nip = nip;
 
     return supplierDto;
-}
+};

@@ -10,7 +10,7 @@ import { expect } from 'chai';
 describe('Invoice service', () => {
 
     let invoiceRepository: InvoiceRepository;
-    let invoiceService: InvoiceService
+    let invoiceService: InvoiceService;
 
     beforeEach(() => {
         invoiceRepository = new InvoiceRepository();
@@ -81,7 +81,7 @@ const getInvoice = (): Invoice => {
     invoice.merchandises = [getMerchandise(), getMerchandise()];
 
     return invoice;
-}
+};
 
 const getMerchandise = (): Merchandise => {
     const merchandise = new Merchandise();
@@ -91,5 +91,5 @@ const getMerchandise = (): Merchandise => {
     merchandise.price = 11.36;
 
     return merchandise;
-}
+};
 

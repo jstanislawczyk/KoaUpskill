@@ -70,4 +70,4 @@ const getSupplier = (): Supplier => {
     supplier.nip = '1234567890';
 
     return supplier;
-}
+};

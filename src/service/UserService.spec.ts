@@ -66,7 +66,7 @@ describe('Users service', () => {
 
 const getMultipleUsers = (): User[] => {
     return [getUser(), getUser()];
-}
+};
 
 const getUser = (): User => {
     const user = new User();
@@ -75,4 +75,4 @@ const getUser = (): User => {
     user.role = UserRole.ADMIN;
 
     return user;
-}
+};

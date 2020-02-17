@@ -51,7 +51,7 @@ const createTestUser = (firstName: string, lastName: string, role: UserRole): Us
     user.role = role;
 
     return user;
-}
+};
 
 const createTestUserDto = (firstName: string, lastName: string, role: UserRole): UserDto => {
     const userDto = new UserDto();
@@ -62,4 +62,4 @@ const createTestUserDto = (firstName: string, lastName: string, role: UserRole):
     userDto.role = role;
 
     return userDto;
-}
+};

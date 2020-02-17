@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { createKoaServer, useContainer } from 'routing-controllers';
 import { createConnection, useContainer as useTypeOrmContainer, Connection } from 'typeorm';
 import { Container } from 'typedi';
-import { DatabaseConfig } from '../config/DatabaseConfig';
+import { DatabaseConfig } from './DatabaseConfig';
 import * as config from 'config';
 import { Logger } from './Logger';
 import { LoggerLevel } from '../enum/LoggerLevel';
@@ -42,7 +42,7 @@ export class Application {
     public close(): void {
         const appName = config.get('app.name');
 
-        this.databaseConnection.close();
+        this.databaseConnection.close().then(() => {});
         this.appContext.close();
 
         Logger.log(`${appName} server stopped`);

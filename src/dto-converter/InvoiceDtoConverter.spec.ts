@@ -57,7 +57,7 @@ const createTestMerchandise = (name: string, price: number, quantity: number): M
     merchandise.quantity = quantity;
 
     return merchandise;
-}
+};
 
 const createTestInvoice = 
     (dateOfInvoice: Date, status: InvoiceStatus, supplierId: string, managerId: string, merchandises: Merchandise[]): Invoice => {
@@ -71,7 +71,7 @@ const createTestInvoice =
     invoice.merchandises = merchandises;
 
     return invoice;
-}
+};
 
 const createTestInvoiceDto =
     (dateOfInvoice: Date, status: InvoiceStatus, supplierId: string, managerId: string, merchandises: Merchandise[]): InvoiceDto => {
@@ -86,4 +86,4 @@ const createTestInvoiceDto =
     invoiceDto.merchandises = merchandises;
 
     return invoiceDto;
-}
+};

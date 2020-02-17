@@ -1,4 +1,3 @@
-
 import { InvoiceService } from '../service/InvoiceService';
 import { JsonController, Get, NotFoundError, Param } from 'routing-controllers';
 import { InvoiceDtoConverter } from '../dto-converter/InvoiceDtoConverter';
