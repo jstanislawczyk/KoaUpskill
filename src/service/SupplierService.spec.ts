@@ -46,7 +46,19 @@ describe('Supplier service', () => {
             sinon.stub(supplierRepository, 'findOne' as any).resolves(getSupplier());
             sinon.stub(supplierRepository, 'save' as any).resolves(updatedSupplier);
 
-            assert.deepEqual(await supplierService.saveSupplier(updatedSupplier), updatedSupplier);
+            assert.deepEqual(await supplierService.updateSupplier('SomeId', updatedSupplier), updatedSupplier);
+        });
+    });
+
+    describe('saveSupplier()', () => {
+        it('Should save supplier', async () => {
+            const savedSupplier: Supplier = getSupplier();
+            savedSupplier.name = 'Name';
+            savedSupplier.nip = '0987654321';
+
+            sinon.stub(supplierRepository, 'save' as any).resolves(savedSupplier);
+
+            assert.deepEqual(await supplierService.saveSupplier(savedSupplier), savedSupplier);
         });
     });
 });

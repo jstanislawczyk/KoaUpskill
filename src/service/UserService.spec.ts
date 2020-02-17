@@ -47,6 +47,18 @@ describe('Users service', () => {
             sinon.stub(userRepository, 'findOne' as any).resolves(getUser());
             sinon.stub(userRepository, 'save' as any).resolves(updatedUser);
 
+            assert.deepEqual(await userService.updateUser('SomeId', updatedUser), updatedUser);
+        });
+    });
+
+    describe('saveUser()', () => {
+        it('Should save user', async () => {const updatedUser: User = getUser();
+            updatedUser.firstName = 'SavedFirstName';
+            updatedUser.lastName = 'SavedLastName';
+            updatedUser.role = UserRole.MANAGER;
+
+            sinon.stub(userRepository, 'save' as any).resolves(updatedUser);
+
             assert.deepEqual(await userService.saveUser(updatedUser), updatedUser);
         });
     });
