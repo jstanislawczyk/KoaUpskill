@@ -43,7 +43,7 @@ describe('UserDtoConverter unit tests', () => {
     });
 });
 
-function createTestUser(firstName: string, lastName: string, role: UserRole): User {
+const createTestUser = (firstName: string, lastName: string, role: UserRole): User => {
     const user = new User();
     
     user.firstName = firstName;
@@ -53,7 +53,7 @@ function createTestUser(firstName: string, lastName: string, role: UserRole): Us
     return user;
 }
 
-function createTestUserDto(firstName: string, lastName: string, role: UserRole): UserDto {
+const createTestUserDto = (firstName: string, lastName: string, role: UserRole): UserDto => {
     const userDto = new UserDto();
 
     userDto.id = '';

@@ -49,7 +49,7 @@ describe('InvoiceDtoConverter unit tests', () => {
     });
 });
 
-function createTestMerchandise(name: string, price: number, quantity: number): Merchandise {
+const createTestMerchandise = (name: string, price: number, quantity: number): Merchandise => {
     const merchandise = new Merchandise();
 
     merchandise.name = name;
@@ -59,9 +59,8 @@ function createTestMerchandise(name: string, price: number, quantity: number): M
     return merchandise;
 }
 
-function createTestInvoice(
-    dateOfInvoice: Date, status: InvoiceStatus, supplierId: string, managerId: string, merchandises: Merchandise[]
-): Invoice {
+const createTestInvoice = 
+    (dateOfInvoice: Date, status: InvoiceStatus, supplierId: string, managerId: string, merchandises: Merchandise[]): Invoice => {
 
     const invoice = new Invoice();
 
@@ -74,9 +73,8 @@ function createTestInvoice(
     return invoice;
 }
 
-function createTestInvoiceDto(
-    dateOfInvoice: Date, status: InvoiceStatus, supplierId: string, managerId: string, merchandises: Merchandise[]
-): InvoiceDto {
+const createTestInvoiceDto =
+    (dateOfInvoice: Date, status: InvoiceStatus, supplierId: string, managerId: string, merchandises: Merchandise[]): InvoiceDto => {
 
     const invoiceDto = new InvoiceDto();
     

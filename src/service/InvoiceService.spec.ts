@@ -7,11 +7,17 @@ import { Merchandise } from '../entity/Merchandise';
 import { InvoiceStatus } from '../enum/InvoiceStatus';
 
 describe('Invoice service', () => {
+
+    let invoiceRepository: InvoiceRepository;
+    let invoiceService: InvoiceService
+
+    beforeEach(() => {
+        invoiceRepository = new InvoiceRepository();
+        invoiceService = new InvoiceService(invoiceRepository);
+    });
+
     describe('getAllInvoices()', () => {
         it('Should return all invoices', async () => {
-            const invoiceRepository: InvoiceRepository = new InvoiceRepository();
-            const invoiceService: InvoiceService = new InvoiceService(invoiceRepository);
-
             sinon.stub(invoiceRepository, 'find' as any).resolves([getInvoice(), getInvoice()]);
 
             assert.deepEqual(await invoiceService.getAllInvoices(), [getInvoice(), getInvoice()]);
@@ -20,15 +26,19 @@ describe('Invoice service', () => {
 
     describe('getAllInvoices() empty', () => {
         it('Should get empty invoices list', async () => {
-            const invoiceRepository: InvoiceRepository = new InvoiceRepository();
-            const invoiceService: InvoiceService = new InvoiceService(invoiceRepository);
-
             sinon.stub(invoiceRepository, 'find' as any).resolves([]);
 
             assert.deepEqual(await invoiceService.getAllInvoices(), []);
         });
     });
 
+    describe('getInvoiceById()', () => {
+        it('Should find one invoice', async () => {
+            sinon.stub(invoiceRepository, 'findOne' as any).resolves(getInvoice());
+
+            assert.deepEqual(await invoiceService.getInvoiceById('Som3ID'), getInvoice());
+        });
+    });
 });
 
 const getInvoice = (): Invoice => {

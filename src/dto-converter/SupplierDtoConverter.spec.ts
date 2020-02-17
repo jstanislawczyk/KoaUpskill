@@ -42,7 +42,7 @@ describe('SupplierDtoConverter unit tests', () => {
     });
 });
 
-function createTestSupplier(name: string, nip: string): Supplier {
+const createTestSupplier = (name: string, nip: string): Supplier => {
     const supplier = new Supplier();
     
     supplier.name = name;
@@ -51,7 +51,7 @@ function createTestSupplier(name: string, nip: string): Supplier {
     return supplier;
 }
 
-function createTestSupplierDto(name: string, nip: string): SupplierDto {
+const createTestSupplierDto = (name: string, nip: string): SupplierDto => {
     const supplierDto = new SupplierDto();
 
     supplierDto.id = '';

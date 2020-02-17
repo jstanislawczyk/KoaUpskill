@@ -6,11 +6,16 @@ import { User } from '../entity/User';
 import { UserRole } from '../enum/UserRole';
 
 describe('Users service', () => {
+    let userRepository: UserRepository = new UserRepository();
+    let userService: UserService = new UserService(userRepository);
+
+    beforeEach(() => {
+        userRepository = new UserRepository();
+        userService = new UserService(userRepository);
+    });
+
     describe('getAllUsers()', () => {
         it('Should return all users', async () => {
-            const userRepository: UserRepository = new UserRepository();
-            const userService: UserService = new UserService(userRepository);
-
             sinon.stub(userRepository, 'find' as any).resolves(getMultipleUsers());
 
             assert.deepEqual(await userService.getAllUsers(), getMultipleUsers());
@@ -19,9 +24,6 @@ describe('Users service', () => {
 
     describe('getAllUsers() empty', () => {
         it('Should get empty users list', async () => {
-            const userRepository: UserRepository = new UserRepository();
-            const userService: UserService = new UserService(userRepository);
-
             sinon.stub(userRepository, 'find' as any).resolves([]);
 
             assert.deepEqual(await userService.getAllUsers(), []);
@@ -30,9 +32,6 @@ describe('Users service', () => {
 
     describe('findOneUser()', () => {
         it('Should find one user', async () => {
-            const userRepository: UserRepository = new UserRepository();
-            const userService: UserService = new UserService(userRepository);
-
             sinon.stub(userRepository, 'findOne' as any).resolves(getUser());
 
             assert.deepEqual(await userService.findOneUser('Som3ID'), getUser());
@@ -40,11 +39,7 @@ describe('Users service', () => {
     });
 
     describe('updateUser()', () => {
-        it('Should update user', async () => {
-            const userRepository: UserRepository = new UserRepository();
-            const userService: UserService = new UserService(userRepository);
-
-            const updatedUser: User = getUser();
+        it('Should update user', async () => {const updatedUser: User = getUser();
             updatedUser.firstName = 'UpdatedFirstName';
             updatedUser.lastName = 'UpdatedLastName';
             updatedUser.role = UserRole.MANAGER;
@@ -57,11 +52,11 @@ describe('Users service', () => {
     });
 });
 
-function getMultipleUsers(): User[] {
+const getMultipleUsers = (): User[] => {
     return [getUser(), getUser()];
 }
 
-function getUser(): User {
+const getUser = (): User => {
     const user = new User();
     user.firstName = 'John';
     user.lastName = 'Doe';
