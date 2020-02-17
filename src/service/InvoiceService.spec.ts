@@ -5,6 +5,7 @@ import { InvoiceService } from './InvoiceService';
 import { Invoice } from '../entity/Invoice';
 import { Merchandise } from '../entity/Merchandise';
 import { InvoiceStatus } from '../enum/InvoiceStatus';
+import { expect } from 'chai';
 
 describe('Invoice service', () => {
 
@@ -37,6 +38,35 @@ describe('Invoice service', () => {
             sinon.stub(invoiceRepository, 'findOne' as any).resolves(getInvoice());
 
             assert.deepEqual(await invoiceService.getInvoiceById('Som3ID'), getInvoice());
+        });
+    });
+
+    describe('getInvoiceById() should fail', () => {
+        it('Should find one invoice', async () => {
+            sinon.stub(invoiceRepository, 'findOne' as any).rejects(new Error());
+
+            try { 
+                await invoiceService.getInvoiceById('Som3ID');
+                expect.fail();
+            } catch (error) {
+
+            }    
+        });
+    });
+
+    describe('getAllSupplierInvoices()', () => {
+        it('Should return all invoices for supplier', async () => {
+            sinon.stub(invoiceRepository, 'findAllBySupplier' as any).resolves([getInvoice(), getInvoice()]);
+
+            assert.deepEqual(await invoiceService.getAllSupplierInvoices('Som3Id'), [getInvoice(), getInvoice()]);
+        });
+    });
+    
+    describe('getAllManagerInvoices()', () => {
+        it('Should return all invoices for manager', async () => {
+            sinon.stub(invoiceRepository, 'findAllByManager' as any).resolves([getInvoice(), getInvoice()]);
+
+            assert.deepEqual(await invoiceService.getAllManagerInvoices('Som3Id'), [getInvoice(), getInvoice()]);
         });
     });
 });
