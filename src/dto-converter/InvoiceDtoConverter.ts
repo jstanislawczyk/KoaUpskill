@@ -9,7 +9,7 @@ export class InvoiceDtoConverter {
         invoiceDto.id = invoice.id 
             ? invoice.id.toHexString() 
             : '';
-        invoiceDto.dateOfInvoice = invoice.dateOfInvoice;
+        invoiceDto.dateOfInvoice = invoice.dateOfInvoice.toISOString();
         invoiceDto.status = invoice.status;
         invoiceDto.supplierId = invoice.supplierId;
         invoiceDto.managerId = invoice.managerId;
@@ -21,7 +21,7 @@ export class InvoiceDtoConverter {
     public static toEntity(invoiceDto: InvoiceDto): Invoice {
         const invoice = new Invoice();
 
-        invoice.dateOfInvoice = invoiceDto.dateOfInvoice;
+        invoice.dateOfInvoice = new Date(invoiceDto.dateOfInvoice);
         invoice.status = invoiceDto.status;
         invoice.supplierId = invoiceDto.supplierId;
         invoice.managerId = invoiceDto.managerId;

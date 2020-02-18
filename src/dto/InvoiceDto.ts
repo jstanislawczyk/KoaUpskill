@@ -1,4 +1,4 @@
-import { validateOrReject, IsEnum, IsDateString } from 'class-validator';
+import {validateOrReject, IsEnum, IsDateString, IsDefined} from 'class-validator';
 import { InvoiceStatus } from '../enum/InvoiceStatus';
 import { Merchandise } from '../entity/Merchandise';
 
@@ -7,13 +7,17 @@ export class InvoiceDto {
     id: string;
     
     @IsDateString()
-    dateOfInvoice: Date;
+    dateOfInvoice: string;
 
     @IsEnum(InvoiceStatus)
     status: InvoiceStatus;
 
+    @IsDefined()
     supplierId: string;
+
+    @IsDefined()
     managerId: string;
+
     merchandises: Merchandise[];
 
     async validate() {

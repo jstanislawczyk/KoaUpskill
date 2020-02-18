@@ -16,13 +16,24 @@ export class InvoiceDataGenerator {
         return invoice;
     }
 
+    public static createInvoiceWithNoSupplier(managerId:string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]) {
+        const invoice = new Invoice();
+
+        invoice.managerId = managerId;
+        invoice.status = status;
+        invoice.dateOfInvoice = date;
+        invoice.merchandises = merchandises;
+
+        return invoice;
+    }
+
     public static createInvoiceDto(supplierId: string, managerId: string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]) {
         const invoiceDto = new InvoiceDto();
 
         invoiceDto.supplierId = supplierId;
         invoiceDto.managerId = managerId;
         invoiceDto.status = status;
-        invoiceDto.dateOfInvoice = date;
+        invoiceDto.dateOfInvoice = date.toISOString();
         invoiceDto.merchandises = merchandises;
 
         return invoiceDto;

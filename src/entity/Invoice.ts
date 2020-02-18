@@ -1,5 +1,5 @@
 import { Entity, Column, ObjectID, ObjectIdColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { validateOrReject, IsDefined, IsEnum, IsDateString, ValidateNested } from 'class-validator';
+import { validateOrReject, IsDefined, IsEnum, ValidateNested } from 'class-validator';
 import { InvoiceStatus } from '../enum/InvoiceStatus';
 import { Merchandise } from './Merchandise';
 import { Type } from 'class-transformer';
@@ -11,7 +11,6 @@ export class Invoice {
     id: ObjectID;
     
     @Column()
-    @IsDateString()
     @IsDefined()
     dateOfInvoice: Date;
 

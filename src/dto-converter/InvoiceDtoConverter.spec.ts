@@ -79,7 +79,7 @@ const createTestInvoiceDto =
     const invoiceDto = new InvoiceDto();
     
     invoiceDto.id = '';
-    invoiceDto.dateOfInvoice = dateOfInvoice;
+    invoiceDto.dateOfInvoice = dateOfInvoice.toISOString();
     invoiceDto.status = status;
     invoiceDto.supplierId = supplierId;
     invoiceDto.managerId = managerId;
