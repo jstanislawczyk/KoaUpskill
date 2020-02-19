@@ -122,7 +122,7 @@ describe('Users controller integration test', () => {
         'SupplierId1', 'ManagerId1', InvoiceStatus.ACCEPTED, new Date(2016, 1, 3), merchandises);
 
       const invoiceDto: InvoiceDto = InvoiceDtoConverter.toDto(invoice);
-      const savedInvoice = await getRepository(Invoice).save(invoice);
+      const savedInvoice: Invoice = await getRepository(Invoice).save(invoice);
 
       return request(application.appContext)
         .get(`/api/invoices/${savedInvoice.id}`)
@@ -159,7 +159,7 @@ describe('Users controller integration test', () => {
   });
 
   describe('POST /api/invoices', () => {
-    it('respond with validation error', async () => {
+    it('respond with JSON containing saved invoice', async () => {
       let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
