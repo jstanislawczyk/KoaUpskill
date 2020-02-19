@@ -189,7 +189,7 @@ describe('Users controller integration test', () => {
         });
     });
   });
-/*
+
   describe('POST /api/invoices NotFound Manager', () => {
     it('respond with validation error', async () => {
       let supplier: Supplier = SupplierDataGenerator.createSupplier('TestTest1', '1234567890');
@@ -242,5 +242,5 @@ describe('Users controller integration test', () => {
           assert.deepEqual(errorResponse, expectedErrorResponse);
         });
     });
-  });*/
+  });
 });
