@@ -157,6 +157,38 @@ describe('Users controller integration test', () => {
         .expect(400);
     });
   });
+
+  describe('POST /api/invoices', () => {
+    it('respond with validation error', async () => {
+      let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+      user = await getRepository(User).save(user);
+
+      let supplier: Supplier = SupplierDataGenerator.createSupplier('TestTest1', '1234567890');
+      supplier = await getRepository(Supplier).save(supplier);
+
+      const merchandises: Merchandise[] = [
+        MerchandiseDataGenerator.createMerchandise('TEST1', 13.33, 12),
+        MerchandiseDataGenerator.createMerchandise('TEST2', 33.33, 5),
+      ];
+
+      const invoiceDto: InvoiceDto = InvoiceDataGenerator.createInvoiceDto(
+        supplier.id.toHexString(), user.id.toHexString(), InvoiceStatus.ACCEPTED, new Date(2016, 1, 3), merchandises);
+
+      return request(application.appContext)
+        .post('/api/invoices')
+        .send(invoiceDto)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .then((response: any) => {
+          assert.isNotNull(response.body.id);
+          assert.equal(response.body.supplierId, invoiceDto.supplierId);
+          assert.equal(response.body.managerId, invoiceDto.managerId);
+          assert.equal(response.body.dateOfInvoice, invoiceDto.dateOfInvoice);
+          assert.equal(response.body.status, invoiceDto.status);
+          assert.deepEqual(response.body.merchandises, invoiceDto.merchandises);
+        });
+    });
+  });
 /*
   describe('POST /api/invoices NotFound Manager', () => {
     it('respond with validation error', async () => {
