@@ -7,8 +7,10 @@
     "build": "tsc",
     "serve": "ts-node ./src/app.ts",
     "start": "set NODE_ENV=development&&nodemon ./src/app.ts",
-    "test": "set NODE_ENV=test&&mocha -r ts-node/register './**/*.spec.ts' --exit --timeout 10000",
-    "lint": "tslint --project tsconfig.json --format stylish"
+    "test": "set NODE_ENV=test&&mocha -r ts-node/register './**/*.spec.ts' --exit --timeout 15000",
+    "test-unit": "set NODE_ENV=test&&mocha -r ts-node/register './src/**/*.spec.ts' --exit --timeout 15000",
+    "test-integration": "set NODE_ENV=test&&mocha -r ts-node/register './test/**/*.spec.ts' --exit --timeout 15000",
+    "lint": "npx eslint **/*.ts"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
