@@ -7,51 +7,51 @@ describe('SupplierDtoConverter unit tests', () => {
 
     describe('toDto()', () => {
         it('should return correct dto from supplier', () => {
-            const userToConvert: Supplier = createTestSupplier('TestSupplier', '1234567890');
-            const expectedUserDto: SupplierDto = createTestSupplierDto('TestSupplier', '1234567890');
+            const supplierToConvert: Supplier = createTestSupplier('TestSupplier', '1234567890');
+            const expectedSupplierDto: SupplierDto = createTestSupplierDto('TestSupplier', '1234567890');
            
-            expect(SupplierDtoConverter.toDto(userToConvert))
-                .to.eql(expectedUserDto);
+            expect(SupplierDtoConverter.toDto(supplierToConvert))
+                .to.eql(expectedSupplierDto);
         });
     });
 
     describe('toEntity()', () => {
         it('should return correct supplier from dto', () => {
-            const userToConvert: Supplier = createTestSupplier('TestSupplier', '1234567890');
-            const expectedUserDto: SupplierDto = createTestSupplierDto('TestSupplier', '1234567890');
+            const expectedSupplier: Supplier = createTestSupplier('TestSupplier', '1234567890');
+            const supplierDtoToConvert: SupplierDto = createTestSupplierDto('TestSupplier', '1234567890');
            
-            expect(SupplierDtoConverter.toEntity(expectedUserDto))
-                .to.eql(userToConvert);
+            expect(SupplierDtoConverter.toEntity(supplierDtoToConvert))
+                .to.eql(expectedSupplier);
         });
     });
 
     describe('toListOfDtos()', () => {
         it('should return correct list of supplier dtos from users list', () => {
-            const usersToConvert: Supplier[]  = [
+            const suppliersToConvert: Supplier[]  = [
                 createTestSupplier('TestSupplier', '1234567890'),
                 createTestSupplier('SomeSupplier', '0987654321'),
             ];
-            const expectedUserDtos: SupplierDto[] = [
+            const expectedSupplierDtos: SupplierDto[] = [
                 createTestSupplierDto('TestSupplier', '1234567890'),
                 createTestSupplierDto('SomeSupplier', '0987654321'),
             ];
            
-            expect(SupplierDtoConverter.toListOfDtos(usersToConvert))
-                .to.eql(expectedUserDtos);
+            expect(SupplierDtoConverter.toListOfDtos(suppliersToConvert))
+                .to.eql(expectedSupplierDtos);
         });
     });
 });
 
-function createTestSupplier(name: string, nip: string): Supplier {
+const createTestSupplier = (name: string, nip: string): Supplier => {
     const supplier = new Supplier();
     
     supplier.name = name;
     supplier.nip = nip;
 
     return supplier;
-}
+};
 
-function createTestSupplierDto(name: string, nip: string): SupplierDto {
+const createTestSupplierDto = (name: string, nip: string): SupplierDto => {
     const supplierDto = new SupplierDto();
 
     supplierDto.id = '';
@@ -59,4 +59,4 @@ function createTestSupplierDto(name: string, nip: string): SupplierDto {
     supplierDto.nip = nip;
 
     return supplierDto;
-}
+};

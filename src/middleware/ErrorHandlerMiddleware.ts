@@ -1,6 +1,6 @@
 import { Middleware, KoaMiddlewareInterface, Ctx } from 'routing-controllers';
 import { Context } from 'vm';
-import { ErrorDataGenerator } from '../util/data-generator/ErrorDataGenerator';
+import { ErrorDataGenerator } from '../../test/util/data-generator/ErrorDataGenerator';
 import { Logger } from '../config/Logger';
 import * as config from 'config';
 

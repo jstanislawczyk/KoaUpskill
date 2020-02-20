@@ -15,8 +15,8 @@ export class SupplierController {
     async getAllUsers(): Promise<SupplierDto[]> {
         return await this.supplierService
             .getAllSuppliers()
-            .then(supplier => 
-                SupplierDtoConverter.toListOfDtos(supplier)
+            .then((suppliers: Supplier[]) => 
+                SupplierDtoConverter.toListOfDtos(suppliers)
             );
     }
 

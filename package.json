@@ -7,8 +7,10 @@
     "build": "tsc",
     "serve": "ts-node ./src/app.ts",
     "start": "set NODE_ENV=development&&nodemon ./src/app.ts",
-    "test": "set NODE_ENV=test&&mocha -r ts-node/register './**/*.spec.ts' --exit --timeout 10000",
-    "lint": "tslint --project tsconfig.json --format stylish"
+    "test": "set NODE_ENV=test&&mocha -r ts-node/register './**/*.spec.ts' --exit --timeout 15000",
+    "test-unit": "set NODE_ENV=test&&mocha -r ts-node/register './src/**/*.spec.ts' --exit --timeout 15000",
+    "test-integration": "set NODE_ENV=test&&mocha -r ts-node/register './test/**/*.spec.ts' --exit --timeout 15000",
+    "lint": "npx eslint **/*.ts"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -28,9 +30,8 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@types/supertest": "^2.0.8",
-    "@types/config": "0.0.36",
     "@types/chai": "^4.2.8",
+    "@types/config": "0.0.36",
     "@types/http-status-codes": "^1.2.0",
     "@types/koa": "^2.11.0",
     "@types/koa-bodyparser": "^4.3.0",
@@ -42,18 +43,21 @@
     "@types/node": "^13.7.0",
     "@types/request": "^2.48.4",
     "@types/sinon": "^7.5.1",
-    "sinon": "^8.1.1",
+    "@types/supertest": "^2.0.8",
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "eslint": "^6.8.0",
     "http-status-codes": "^1.4.0",
     "mocha": "^7.0.1",
     "nodemon": "^2.0.2",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",
+    "sinon": "^8.1.1",
     "supertest": "^4.0.2",
     "ts-node": "^8.6.2",
     "tslint": "^6.0.0",
-    "tslint-config-airbnb": "^5.11.2",
     "typeorm": "^0.2.22",
     "typescript": "^3.7.5",
     "typings": "^2.1.1"

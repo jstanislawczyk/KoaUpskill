@@ -7,10 +7,10 @@ import { User } from '../../src/entity/User';
 import { Logger } from '../../src/config/Logger';
 import { LoggerLevel } from '../../src/enum/LoggerLevel';
 import { UserDtoConverter } from '../../src/dto-converter/UserDtoConverter';
-import { UserDataGenerator } from '../../src/util/data-generator/UserDataGenerator';
+import { UserDataGenerator } from '../util/data-generator/UserDataGenerator';
 import { UserDto } from '../../src/dto/UserDto';
 import { Error } from '../../src/exception/Error';
-import { ErrorDataGenerator } from '../../src/util/data-generator/ErrorDataGenerator';
+import { ErrorDataGenerator } from '../util/data-generator/ErrorDataGenerator';
 
 const application: Application = new Application();
 
@@ -18,7 +18,7 @@ describe('Users controller integration test', () => {
 
     before(async () => {
         await application.start();
-    })
+    });
 
     beforeEach(async () => {
         return await application.databaseConnection
@@ -29,7 +29,7 @@ describe('Users controller integration test', () => {
     });
 
     after(async () => {
-        return application.close();
+        await application.close();
     });
 
     describe('GET /api/users', () => {

@@ -15,7 +15,7 @@ export class UserController {
    async getAllUsers(): Promise<UserDto[]> {
       return await this.userService
          .getAllUsers()
-         .then(users => 
+         .then((users: User[]) => 
             UserDtoConverter.toListOfDtos(users)
          );
    }
