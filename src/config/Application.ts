@@ -7,11 +7,9 @@ import * as config from 'config';
 import { Logger } from './Logger';
 import { LoggerLevel } from '../enum/LoggerLevel';
 import { auth } from 'express-openid-connect';
-const Koa = require('koa');
-const router = require('koa-router')();
 import * as https from 'https';
-import * as http from 'http';
 import * as fs from 'fs';
+import * as Koa from 'koa';
 
 export class Application {
   public databaseConnection: Connection;
@@ -27,15 +25,13 @@ export class Application {
       .then(async connection => {
         this.databaseConnection = connection;
 
-        let app = new Koa();
+        const key: Buffer = fs.readFileSync('./localhost-key.pem');
+        const cert: Buffer = fs.readFileSync('./localhost.pem');
 
-        const key = fs.readFileSync('./localhost-key.pem');
-        const cert = fs.readFileSync('./localhost.pem');
+        const port: string = config.get('app.port');
+        const appName: string = config.get('app.name');
 
-        const port = config.get('app.port');
-        const appName = config.get('app.name');
-
-        const configuration = {
+        const auth0Configuration: any = {
           required: false,
           auth0Logout: true,
           baseURL: "https://localhost:3000",
@@ -44,6 +40,8 @@ export class Application {
           appSessionSecret: "sometextsometext",
         };
 
+        const app: any = new Koa();
+
         useKoaServer(app,{
           controllers: [__dirname + '/../controller/*.ts'],
           middlewares: [__dirname + '/../middleware/*.ts'],
@@ -51,17 +49,13 @@ export class Application {
           defaultErrorHandler: false,
         });
 
-        app.use(async (ctx: any, next: any) => {await auth(configuration)});
+        app.use(async (ctx: any, next: any) => {
+            await auth(auth0Configuration)
+        });
 
-        const server = app.callback();
-        /*this.appContext = app.listen(port, () => {
-            Logger.log(`${appName} server runs on port ${port}`);
-        });*/
-
-          this.appContext = https.createServer(server).listen(port, () => {
-              Logger.log(`${appName} server runs on port ${port}`);
-              console.log(app)
-          });
+        this.appContext = https.createServer({key, cert}, app.callback()).listen(port, () => {
+          Logger.log(`${appName} server runs on port ${port}`);
+        });
       })
       .catch(error =>
         Logger.log(`TypeORM connection error: ${error}`, LoggerLevel.ERROR)
