@@ -14,7 +14,7 @@ import {UserRole} from '../../src/enum/UserRole';
 import {Error} from '../../src/exception/Error';
 import {ErrorDataGenerator} from '../util/data-generator/ErrorDataGenerator';
 import {InvoiceDataGenerator} from '../util/data-generator/InvoiceDataGenerator';
-import {MerchandiseDataGenerator} from '../util/data-generator/MerchandiseGenerator';
+import {MerchandiseDataGenerator} from '../util/data-generator/MerchandiseDataGenerator';
 import {UserDataGenerator} from '../util/data-generator/UserDataGenerator';
 
 const application: Application = new Application();

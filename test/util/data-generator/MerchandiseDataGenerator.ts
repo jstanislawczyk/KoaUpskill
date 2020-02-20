@@ -1,7 +1,7 @@
 import { Merchandise } from "../../../src/entity/Merchandise";
 
 export class MerchandiseDataGenerator {
-    public static createMerchandise(name: string, price: number, quantity: number) {
+    public static createMerchandise(name: string, price: number, quantity: number): Merchandise {
         const merchandise = new Merchandise();
 
         merchandise.name = name;
