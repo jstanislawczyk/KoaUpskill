@@ -4,7 +4,7 @@ import { InvoiceStatus } from "../../../src/enum/InvoiceStatus";
 import { InvoiceDto } from "../../../src/dto/InvoiceDto";
 
 export class InvoiceDataGenerator {
-    public static createInvoice(supplierId: string, managerId: string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]) {
+    public static createInvoice(supplierId: string, managerId: string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]): Invoice {
         const invoice = new Invoice();
 
         invoice.supplierId = supplierId;
@@ -16,7 +16,7 @@ export class InvoiceDataGenerator {
         return invoice;
     }
 
-    public static createInvoiceWithNoSupplier(managerId:string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]) {
+    public static createInvoiceWithNoSupplier(managerId: string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]): Invoice {
         const invoice = new Invoice();
 
         invoice.managerId = managerId;
@@ -27,7 +27,7 @@ export class InvoiceDataGenerator {
         return invoice;
     }
 
-    public static createInvoiceDto(supplierId: string, managerId: string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]) {
+    public static createInvoiceDto(supplierId: string, managerId: string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]): InvoiceDto {
         const invoiceDto = new InvoiceDto();
 
         invoiceDto.supplierId = supplierId;
