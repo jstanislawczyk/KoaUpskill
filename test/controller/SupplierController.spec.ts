@@ -31,7 +31,7 @@ describe('Suppliers controller integration test', () => {
     });
 
     after(async () => {
-        return application.close();
+        await application.close();
     });
 
     describe('GET /api/suppliers', () => {

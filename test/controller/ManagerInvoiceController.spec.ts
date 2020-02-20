@@ -34,7 +34,7 @@ describe('Manager invoice controller integration test', () => {
   });
 
   after(async () => {
-    return application.close();
+    await application.close();
   });
 
   describe('GET /users/{managerId}/invoices NotFound', () => {
