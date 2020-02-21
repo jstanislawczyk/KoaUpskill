@@ -1,11 +1,20 @@
 import 'reflect-metadata';
-import { createKoaServer, useContainer } from 'routing-controllers';
+import {sign, verify} from 'jsonwebtoken';
+import {
+  Action,
+  createKoaServer,
+  NotFoundError,
+  UnauthorizedError,
+  useContainer
+} from 'routing-controllers';
 import { createConnection, useContainer as useTypeOrmContainer, Connection } from 'typeorm';
 import { Container } from 'typedi';
+import {User} from '../entity/User';
 import { DatabaseConfig } from './DatabaseConfig';
 import * as config from 'config';
 import { Logger } from './Logger';
 import { LoggerLevel } from '../enum/LoggerLevel';
+import {SecurityConfig} from './SecurityConfig';
 
 export class Application {
   public databaseConnection: Connection;
@@ -28,6 +37,9 @@ export class Application {
           middlewares: [__dirname + '/../middleware/*.ts'],
           routePrefix: '/api',
           defaultErrorHandler: false,
+          authorizationChecker: async (action: Action, roles: string[]) => {
+            return SecurityConfig.handleAuthorizationCheck(action, roles);
+          }
         });
 
         this.appContext = app.listen(port, () => {
