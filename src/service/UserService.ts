@@ -21,6 +21,14 @@ export class UserService {
         return await this.userRepository.findOne(id);
     }
 
+    async findUserByEmailAndPassword(email: string, password: string): Promise<User> {
+        return await this.userRepository.findUserByEmailAndPassword(email, password);
+    }
+
+    async findUserByEmail(email: string): Promise<User> {
+        return await this.userRepository.findUserByEmail(email);
+    }
+
     async saveUser(user: User): Promise<User> {
         return await this.userRepository.save(user);
     }

@@ -1,4 +1,15 @@
-import { JsonController, Param, Body, Get, Post, Patch, Delete, HttpCode, NotFoundError } from 'routing-controllers';
+import {
+   JsonController,
+   Param,
+   Body,
+   Get,
+   Post,
+   Patch,
+   Delete,
+   HttpCode,
+   NotFoundError,
+   Authorized, BadRequestError
+} from 'routing-controllers';
 import { User } from '../entity/User';
 import { UserDto } from '../dto/UserDto';
 import { UserService } from '../service/UserService';
@@ -12,6 +23,7 @@ export class UserController {
    }
 
    @Get()
+   @Authorized()
    async getAllUsers(): Promise<UserDto[]> {
       return await this.userService
          .getAllUsers()
@@ -21,6 +33,7 @@ export class UserController {
    }
 
    @Get('/:id')
+   @Authorized()
    async findOneUser(@Param('id') id: string): Promise<UserDto> {
       return await this.userService
          .findOneUser(id)
@@ -36,15 +49,21 @@ export class UserController {
    @HttpCode(201)
    async saveUser(@Body({ validate: true }) userDto: UserDto): Promise<UserDto> {
       const user: User = UserDtoConverter.toEntity(userDto);
+      const userAlreadyExist: boolean = (await this.userService.findUserByEmail(user.email)) !== undefined;
 
-      return await this.userService
-         .saveUser(user)
-         .then((user: User) => 
-            UserDtoConverter.toDto(user)
-         );
+      if (userAlreadyExist) {
+         throw new BadRequestError(`User with email=${user.email} already exist`);
+      } else {
+         return await this.userService
+           .saveUser(user)
+           .then((user: User) =>
+               UserDtoConverter.toDto(user)
+           );
+      }
    }
 
    @Patch('/:id')
+   @Authorized()
    async updateUser(@Param('id') id: string, @Body({ validate: true }) userDto: UserDto): Promise<UserDto> {
       const newUser: User = UserDtoConverter.toEntity(userDto);
 
@@ -56,6 +75,7 @@ export class UserController {
    }
 
    @Delete('/:id')
+   @Authorized()
    @HttpCode(204)
    async deleteUser(@Param('id') id: string): Promise<DeleteResult> {
       return await this.userService

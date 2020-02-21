@@ -6,4 +6,16 @@ import { User } from '../entity/User';
 @EntityRepository(User)
 export class UserRepository extends MongoRepository<User>  {
 
+  findUserByEmailAndPassword(email: string, password: string): Promise<User> {
+    return this.findOneOrFail({
+      email: email,
+      password: password,
+    });
+  }
+
+  findUserByEmail(email: string): Promise<User> {
+    return this.findOne({
+      email: email,
+    });
+  }
 }
