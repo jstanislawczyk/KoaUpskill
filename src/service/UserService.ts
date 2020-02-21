@@ -4,6 +4,10 @@ import { User } from '../entity/User';
 import { UserRepository } from '../repository/UserRepository';
 import { NotFoundError } from 'routing-controllers/http-error/NotFoundError';
 import { DeleteResult } from 'typeorm';
+import * as config from 'config';
+import {sign} from 'jsonwebtoken';
+import {UnauthorizedError} from 'routing-controllers';
+import {JsonWebToken} from "../config/helper/JsonWebToken";
 
 @Service()
 export class UserService {
@@ -21,8 +25,20 @@ export class UserService {
         return await this.userRepository.findOne(id);
     }
 
-    async findUserByEmailAndPassword(email: string, password: string): Promise<User> {
-        return await this.userRepository.findUserByEmailAndPassword(email, password);
+    async authenticateUser(email: string, password: string): Promise<string> {
+        return await this.userRepository
+            .findUserByEmailAndPassword(email, password)
+            .then((user: User) => {
+                const applicationSecret: string = config.get('security.secret');
+                const tokenBody: JsonWebToken = new JsonWebToken();
+
+                tokenBody.setupAuthenticationToken(user.id.toHexString());
+
+                return sign(Object.assign({}, tokenBody), applicationSecret);
+            })
+            .catch(() => {
+                throw new UnauthorizedError('Login failed');
+            });
     }
 
     async findUserByEmail(email: string): Promise<User> {
