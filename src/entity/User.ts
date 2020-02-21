@@ -5,7 +5,6 @@ import {
   Length,
   IsEnum,
   IsEmail,
-  MinLength,
   Validate
 } from 'class-validator';
 import { UserRole } from '../enum/UserRole';
