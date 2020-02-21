@@ -9,16 +9,19 @@ export class UserDtoConverter {
         newUserDto.id = user.id 
             ? user.id.toHexString() 
             : '';
+        newUserDto.email = user.email;
+        newUserDto.role = user.role;
         newUserDto.firstName = user.firstName;
         newUserDto.lastName = user.lastName;
-        newUserDto.role = user.role;
 
         return newUserDto;
     }
 
     public static toEntity(userDto: UserDto): User {
         const newUser = new User();
-        
+
+        newUser.email = userDto.email;
+        newUser.password = userDto.password;
         newUser.firstName = userDto.firstName;
         newUser.lastName = userDto.lastName;
         newUser.role = userDto.role;
