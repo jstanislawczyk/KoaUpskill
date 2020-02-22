@@ -7,7 +7,7 @@ import { DeleteResult } from 'typeorm';
 import * as config from 'config';
 import {sign} from 'jsonwebtoken';
 import {UnauthorizedError} from 'routing-controllers';
-import {JsonWebToken} from "../config/helper/JsonWebToken";
+import {JsonWebToken} from '../config/helper/JsonWebToken';
 
 @Service()
 export class UserService {
