@@ -42,7 +42,7 @@ describe('Invoice service', () => {
     });
 
     describe('getInvoiceById() should fail', () => {
-        it('Should find one invoice', async () => {
+        it('Should not find one invoice', async () => {
             sinon.stub(invoiceRepository, 'findOne' as any).rejects(new Error());
 
             try { 
