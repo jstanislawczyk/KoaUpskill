@@ -23,7 +23,7 @@ export class Application {
     useTypeOrmContainer(Container);
 
     await createConnection(databaseConfig)
-      .then(async connection => {
+      .then(async (connection: Connection) => {
         this.databaseConnection = connection;
 
         const port = config.get('app.port');
@@ -34,7 +34,7 @@ export class Application {
           routePrefix: '/api',
           defaultErrorHandler: false,
           authorizationChecker: async (action: Action, roles: string[]) => {
-            return SecurityConfig.handleAuthorizationCheck(action, roles);
+            return await SecurityConfig.handleAuthorizationCheck(action, roles, connection);
           }
         });
 
