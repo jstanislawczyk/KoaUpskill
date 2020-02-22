@@ -54,7 +54,7 @@ describe('Manager invoice controller integration test', () => {
 
   describe('GET /users/{managerId}/invoices empty', () => {
     it('respond with empty invoices list', async () => {
-      let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+      let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
       return await request(application.appContext)
@@ -74,7 +74,7 @@ describe('Manager invoice controller integration test', () => {
         MerchandiseDataGenerator.createMerchandise('TEST2', 33.33, 5),
       ];
 
-      let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+      let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
       const invoices: Invoice[] = [

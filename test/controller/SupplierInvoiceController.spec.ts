@@ -8,16 +8,13 @@ import {InvoiceDto} from '../../src/dto/InvoiceDto';
 import {Invoice} from '../../src/entity/Invoice';
 import {Merchandise} from '../../src/entity/Merchandise';
 import {Supplier} from '../../src/entity/Supplier';
-import {User} from '../../src/entity/User';
 import {InvoiceStatus} from '../../src/enum/InvoiceStatus';
 import {LoggerLevel} from '../../src/enum/LoggerLevel';
-import {UserRole} from '../../src/enum/UserRole';
 import {Error} from '../../src/exception/Error';
 import {ErrorDataGenerator} from '../util/data-generator/ErrorDataGenerator';
 import {InvoiceDataGenerator} from '../util/data-generator/InvoiceDataGenerator';
 import {MerchandiseDataGenerator} from '../util/data-generator/MerchandiseDataGenerator';
 import {SupplierDataGenerator} from '../util/data-generator/SupplierDataGenerator';
-import {UserDataGenerator} from '../util/data-generator/UserDataGenerator';
 
 const application: Application = new Application();
 

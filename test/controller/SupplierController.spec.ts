@@ -106,7 +106,7 @@ describe('Suppliers controller integration test', () => {
 
     describe('POST /api/suppliers BAD REQUEST', () => {
         it('respond with bad request error', async () => {
-            const user: User = UserDataGenerator.createUser('John', '', UserRole.MANAGER);
+            const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', '', UserRole.MANAGER);
             
             return request(application.appContext)
                 .post('/api/suppliers')

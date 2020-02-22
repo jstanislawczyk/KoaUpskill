@@ -160,7 +160,7 @@ describe('Users controller integration test', () => {
 
   describe('POST /api/invoices', () => {
     it('respond with JSON containing saved invoice', async () => {
-      let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+      let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
       let supplier: Supplier = SupplierDataGenerator.createSupplier('TestTest1', '1234567890');
@@ -219,7 +219,7 @@ describe('Users controller integration test', () => {
 
   describe('POST /api/invoices NotFound Supplier', () => {
     it('respond with validation error', async () => {
-      let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+      let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
       const merchandises: Merchandise[] = [
