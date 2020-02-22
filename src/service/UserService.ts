@@ -6,8 +6,9 @@ import { NotFoundError } from 'routing-controllers/http-error/NotFoundError';
 import { DeleteResult } from 'typeorm';
 import * as config from 'config';
 import {sign} from 'jsonwebtoken';
-import {UnauthorizedError} from 'routing-controllers';
+import {BadRequestError, UnauthorizedError} from 'routing-controllers';
 import {JsonWebToken} from '../config/helper/JsonWebToken';
+import {UserDtoConverter} from "../dto-converter/UserDtoConverter";
 
 @Service()
 export class UserService {
@@ -46,6 +47,11 @@ export class UserService {
     }
 
     async saveUser(user: User): Promise<User> {
+        await this.userRepository.findUserByEmail(user.email)
+            .catch(() => {
+                throw new BadRequestError(`User with email=${user.email} already exist`);
+            });
+
         return await this.userRepository.save(user);
     }
 

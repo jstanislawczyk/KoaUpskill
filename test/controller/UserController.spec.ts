@@ -47,8 +47,8 @@ describe('Users controller integration test', () => {
 
     describe('GET /api/users', () => {
         it('respond with json containing list of users', async () => {
-            const firstUser: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
-            const secondUser: User = UserDataGenerator.createUser('Jane', 'Dane', UserRole.ADMIN);
+            const firstUser: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
+            const secondUser: User = UserDataGenerator.createUser('test2@mail.com', '1qazXSW@', 'Jane', 'Dane', UserRole.ADMIN);
 
             await getRepository(User).save(firstUser);
             await getRepository(User).save(secondUser);
@@ -83,7 +83,7 @@ describe('Users controller integration test', () => {
 
     describe('GET /api/user/{id}', () => {
         it('respond with json containing user', async () => {
-            let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+            let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
 
             user = await getRepository(User)
                 .save(user)
@@ -104,7 +104,7 @@ describe('Users controller integration test', () => {
 
     describe('POST /api/user BAD REQUEST', () => {
         it('respond with bad request error', async () => {
-            const user: User = UserDataGenerator.createUser('John', '', UserRole.MANAGER);
+            const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', '', UserRole.MANAGER);
             
             return request(application.appContext)
                 .post('/api/users')
@@ -116,7 +116,7 @@ describe('Users controller integration test', () => {
 
     describe('POST /api/user', () => {
         it('respond with json containing saved user', async () => {
-            const user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+            const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
             const expectedUserDto: UserDto = UserDtoConverter.toDto(user);
             
             return request(application.appContext)
@@ -139,7 +139,7 @@ describe('Users controller integration test', () => {
 
     describe('PATCH /api/user/{id} NOT FOUND', () => {
         it('respond with message about user not found', async () => {
-            const user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+            const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
             
             return request(application.appContext)
                 .patch('/api/users/5e445b53a1bc7a2354236a3a')
@@ -157,7 +157,7 @@ describe('Users controller integration test', () => {
 
     describe('PATCH /api/user/{id} BAD REQUEST', () => {
         it('respond with message about user bad request', async () => {
-            const user: User = UserDataGenerator.createUser('John', '', UserRole.MANAGER);
+            const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', '', UserRole.MANAGER);
             
             return request(application.appContext)
                 .patch('/api/users/5e445b53a1bc7a2354236a3a')
@@ -169,8 +169,8 @@ describe('Users controller integration test', () => {
 
     describe('PATCH /api/user/{id}', () => {
         it('respond with json containing updated user', async () => {
-            const userBodyForUpdate: User = UserDataGenerator.createUser('Jane', 'Test', UserRole.ADMIN);
-            let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+            const userBodyForUpdate: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'Jane', 'Test', UserRole.ADMIN);
+            let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
 
             user = await getRepository(User)
                 .save(user)
@@ -210,7 +210,7 @@ describe('Users controller integration test', () => {
 
     describe('DELETE /api/user/{id}', () => {
         it('respond with message about user not found', async () => {
-            let user: User = UserDataGenerator.createUser('John', 'Doe', UserRole.MANAGER);
+            let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
 
             user = await getRepository(User)
                 .save(user)

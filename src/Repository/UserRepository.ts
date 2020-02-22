@@ -14,7 +14,7 @@ export class UserRepository extends MongoRepository<User>  {
   }
 
   findUserByEmail(email: string): Promise<User> {
-    return this.findOne({
+    return this.findOneOrFail({
       email: email,
     });
   }

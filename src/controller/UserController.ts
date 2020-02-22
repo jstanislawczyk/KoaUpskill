@@ -8,7 +8,7 @@ import {
    Delete,
    HttpCode,
    NotFoundError,
-   Authorized, BadRequestError
+   Authorized
 } from 'routing-controllers';
 import { User } from '../entity/User';
 import { UserDto } from '../dto/UserDto';
@@ -49,17 +49,12 @@ export class UserController {
    @HttpCode(201)
    async saveUser(@Body({ validate: true }) userDto: UserDto): Promise<UserDto> {
       const user: User = UserDtoConverter.toEntity(userDto);
-      const userAlreadyExist: boolean = (await this.userService.findUserByEmail(user.email)) !== undefined;
 
-      if (userAlreadyExist) {
-         throw new BadRequestError(`User with email=${user.email} already exist`);
-      } else {
-         return await this.userService
-           .saveUser(user)
-           .then((user: User) =>
-               UserDtoConverter.toDto(user)
-           );
-      }
+      return await this.userService
+        .saveUser(user)
+        .then((user: User) =>
+            UserDtoConverter.toDto(user)
+        );
    }
 
    @Patch('/:id')
