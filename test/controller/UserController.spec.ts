@@ -54,7 +54,18 @@ describe('Users controller integration test', () => {
                 .expect(200)
                 .then((response: any) => 
                     assert.deepEqual(response.body, expectedDtoList)
-                )
+                );
+        });
+    });
+
+    describe('GET /api/users UNAUTHORIZED', () => {
+        it('respond with unauthorized exception', async () => {
+            return request(application.appContext)
+                .get('/api/users')
+                .set({
+                    'Accept': 'application/json',
+                })
+                .expect(401);
         });
     });
 
@@ -74,7 +85,19 @@ describe('Users controller integration test', () => {
                     const expectedErrorResponse = ErrorDataGenerator.createError(404, 'User with id=5e445b53a1bc7a2354236a3a not found');
 
                     assert.deepEqual(errorResponse, expectedErrorResponse);
+                });
+        });
+    });
+
+    describe('GET /api/user/{id} UNAUTHORIZED', () => {
+        it('respond with message about user not found', async () => {
+
+            return request(application.appContext)
+                .get('/api/users/5e445b53a1bc7a2354236a3a')
+                .set({
+                    'Accept': 'application/json',
                 })
+                .expect(401);
         });
     });
 
@@ -96,14 +119,17 @@ describe('Users controller integration test', () => {
                 .expect(200)
                 .then((response: any) => 
                     assert.deepEqual(response.body, expectedDto)
-                )
+                );
         });
     });
 
     describe('POST /api/user BAD REQUEST', () => {
-        it('respond with bad request error', async () => {
+        it('respond with bad request error if user already exist', async () => {
             const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', '', UserRole.MANAGER);
-            
+            const alreadyExistedUser: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'Jane', 'Dane', UserRole.ADMIN);
+
+            await getRepository(User).save(alreadyExistedUser);
+
             return request(application.appContext)
                 .post('/api/users')
                 .send(user)
@@ -153,7 +179,21 @@ describe('Users controller integration test', () => {
                     const expectedErrorResponse = ErrorDataGenerator.createError(404, 'User with id=5e445b53a1bc7a2354236a3a not found');
 
                     assert.deepEqual(errorResponse, expectedErrorResponse);
+                });
+        });
+    });
+
+    describe('PATCH /api/user/{id} UNAUTHORIZED', () => {
+        it('respond with message about user not found', async () => {
+            const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
+
+            return request(application.appContext)
+                .patch('/api/users/5e445b53a1bc7a2354236a3a')
+                .send(user)
+                .set({
+                    'Accept': 'application/json',
                 })
+                .expect(401);
         });
     });
 
@@ -199,7 +239,7 @@ describe('Users controller integration test', () => {
                     const savedUserDto: UserDto = response.body;
 
                     assert.deepEqual(savedUserDto, expectedDto);
-                })
+                });
         });
     });
 
@@ -219,7 +259,18 @@ describe('Users controller integration test', () => {
                     const expectedErrorResponse = ErrorDataGenerator.createError(404, 'User with id=5e445b53a1bc7a2354236a3a not found');
 
                     assert.deepEqual(errorResponse, expectedErrorResponse);
+                });
+        });
+    });
+
+    describe('DELETE /api/user/{id} UNAUTHORIZED', () => {
+        it('respond with message about user not found', async () => {
+            return request(application.appContext)
+                .delete('/api/users/5e445b53a1bc7a2354236a3a')
+                .set({
+                    'Accept': 'application/json',
                 })
+                .expect(401);
         });
     });
 
