@@ -47,12 +47,13 @@ export class UserService {
     }
 
     async saveUser(user: User): Promise<User> {
-        await this.userRepository.findUserByEmail(user.email)
-            .catch(() => {
-                throw new BadRequestError(`User with email=${user.email} already exist`);
-            });
+        const userExists: boolean = await this.userRepository.findUserByEmail(user.email) !== undefined;
 
-        return await this.userRepository.save(user);
+        if (userExists) {
+            throw new BadRequestError(`User with email=${user.email} already exist`);
+        } else {
+            return await this.userRepository.save(user);
+        }
     }
 
     async updateUser(id: string, newUser: User): Promise<User> {
