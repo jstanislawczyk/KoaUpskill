@@ -10,7 +10,7 @@ import { UserDataGenerator } from '../util/data-generator/UserDataGenerator';
 import { UserDto } from '../../src/dto/UserDto';
 import { Error } from '../../src/exception/Error';
 import { ErrorDataGenerator } from '../util/data-generator/ErrorDataGenerator';
-import {SecurityConfig} from "../util/security/SecurityConfig";
+import {SecurityConfig} from '../util/security/SecurityConfig';
 import * as request from 'supertest';
 
 const application: Application = new Application();
@@ -153,6 +153,7 @@ describe('Users controller integration test', () => {
                     const savedUserDto: UserDto = JSON.parse(response.text);
                     
                     assert.isNotNull(savedUserDto.id);
+                    assert.equal(savedUserDto.email, expectedUserDto.email);
                     assert.equal(savedUserDto.firstName, expectedUserDto.firstName);
                     assert.equal(savedUserDto.lastName, expectedUserDto.lastName);
                     assert.equal(savedUserDto.role, expectedUserDto.role);

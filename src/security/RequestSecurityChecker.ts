@@ -15,9 +15,10 @@ export class RequestSecurityChecker {
 
   public static async findUserFromAction(action: Action, connection: Connection): Promise<User> {
     const applicationSecret: string = config.get('security.secret');
-    const token: string = action.request.header.authorization.replace('Bearer ', '');
+    const authorizationHeader: string = action.request.header.authorization;
 
     try {
+      const token = authorizationHeader.replace('Bearer ', '');
       const tokenBody: JsonWebToken = verify(token, applicationSecret) as JsonWebToken;
       const isTokenNotExpired: boolean = (Date.now() / 1000) < tokenBody.exp;
 
