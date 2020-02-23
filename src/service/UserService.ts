@@ -7,6 +7,7 @@ import { DeleteResult } from 'typeorm';
 import {sign} from 'jsonwebtoken';
 import {BadRequestError, UnauthorizedError} from 'routing-controllers';
 import {JsonWebToken} from '../config/helper/JsonWebToken';
+import {PasswordHashingUtils} from '../security/PasswordHashingUtils';
 import * as config from 'config';
 
 @Service()
@@ -27,14 +28,20 @@ export class UserService {
 
     async authenticateUser(email: string, password: string): Promise<string> {
         return await this.userRepository
-            .findUserByEmailAndPassword(email, password)
-            .then((user: User) => {
-                const applicationSecret: string = config.get('security.secret');
-                const tokenBody: JsonWebToken = new JsonWebToken();
+            .findUserByEmail(email)
+            .then(async (user: User) => {
+                const isPasswordEqualToHash: boolean = await PasswordHashingUtils.isPasswordEqualToHash(password, user.password);
 
-                tokenBody.setupAuthenticationToken(user.id.toHexString());
+                if (isPasswordEqualToHash) {
+                    const applicationSecret: string = config.get('security.secret');
+                    const tokenBody: JsonWebToken = new JsonWebToken();
 
-                return sign(Object.assign({}, tokenBody), applicationSecret);
+                    tokenBody.setupAuthenticationToken(user.id.toHexString());
+
+                    return sign(Object.assign({}, tokenBody), applicationSecret);
+                } else {
+                    throw new UnauthorizedError('Login failed');
+                }
             })
             .catch(() => {
                 throw new UnauthorizedError('Login failed');
@@ -51,6 +58,8 @@ export class UserService {
         if (userExists) {
             throw new BadRequestError(`User with email=${user.email} already exist`);
         } else {
+            user.password = await PasswordHashingUtils.hashPassword(user.password);
+
             return await this.userRepository.save(user);
         }
     }
