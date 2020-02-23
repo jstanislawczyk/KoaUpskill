@@ -1,7 +1,7 @@
 import * as config from 'config';
 import * as bcrypt from 'bcrypt';
 
-export class PasswordEncryptionUtils {
+export class PasswordHashingUtils {
     public static async hashPassword(password: string): Promise<string> {
         const hashingRounds: number = config.get('security.hashingRounds');
         return await bcrypt.hash(password, hashingRounds);
