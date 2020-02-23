@@ -1,7 +1,7 @@
-import { Merchandise } from "../../../src/entity/Merchandise";
-import { Invoice } from "../../../src/entity/Invoice";
-import { InvoiceStatus } from "../../../src/enum/InvoiceStatus";
-import { InvoiceDto } from "../../../src/dto/InvoiceDto";
+import { Merchandise } from '../../../src/entity/Merchandise';
+import { Invoice } from '../../../src/entity/Invoice';
+import { InvoiceStatus } from '../../../src/enum/InvoiceStatus';
+import { InvoiceDto } from '../../../src/dto/InvoiceDto';
 
 export class InvoiceDataGenerator {
     public static createInvoice(supplierId: string, managerId: string, status: InvoiceStatus, date: Date, merchandises: Merchandise[]): Invoice {

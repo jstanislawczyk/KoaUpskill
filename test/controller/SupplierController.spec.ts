@@ -1,6 +1,5 @@
 import { Application } from '../../src/config/Application';
 import { assert } from 'chai';
-import * as request from 'supertest';
 import { getRepository } from 'typeorm';
 import { UserRole } from '../../src/enum/UserRole';
 import { User } from '../../src/entity/User';
@@ -13,6 +12,7 @@ import { Supplier } from '../../src/entity/Supplier';
 import { SupplierDataGenerator } from '../util/data-generator/SupplierDataGenerator';
 import { SupplierDtoConverter } from '../../src/dto-converter/SupplierDtoConverter';
 import { SupplierDto } from '../../src/dto/SupplierDto';
+import * as request from 'supertest';
 
 const application: Application = new Application();
 

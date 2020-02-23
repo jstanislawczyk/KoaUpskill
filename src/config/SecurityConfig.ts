@@ -1,9 +1,9 @@
-import * as config from 'config';
 import {verify} from 'jsonwebtoken';
 import {Action, UnauthorizedError} from 'routing-controllers';
 import {JsonWebToken} from './helper/JsonWebToken';
 import {Connection} from 'typeorm';
 import {User} from '../entity/User';
+import * as config from 'config';
 
 export class SecurityConfig {
   public static async handleAuthorizationCheck(action: Action, roles: string[], connection: Connection): Promise<boolean> {

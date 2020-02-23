@@ -1,10 +1,10 @@
-import * as sinon from 'sinon';
 import { UserService } from './UserService';
 import { UserRepository } from '../repository/UserRepository';
-import * as assert from 'assert';
 import { User } from '../entity/User';
 import { UserRole } from '../enum/UserRole';
 import {expect} from "chai";
+import * as sinon from 'sinon';
+import * as assert from 'assert';
 
 describe('Users service', () => {
     let userRepository: UserRepository = new UserRepository();

@@ -4,11 +4,10 @@ import { User } from '../entity/User';
 import { UserRepository } from '../repository/UserRepository';
 import { NotFoundError } from 'routing-controllers/http-error/NotFoundError';
 import { DeleteResult } from 'typeorm';
-import * as config from 'config';
 import {sign} from 'jsonwebtoken';
 import {BadRequestError, UnauthorizedError} from 'routing-controllers';
 import {JsonWebToken} from '../config/helper/JsonWebToken';
-import {UserDtoConverter} from "../dto-converter/UserDtoConverter";
+import * as config from 'config';
 
 @Service()
 export class UserService {

@@ -1,10 +1,10 @@
-import * as config from 'config';
 import {JsonWebToken} from '../../../src/config/helper/JsonWebToken';
-import {sign} from "jsonwebtoken";
-import {User} from "../../../src/entity/User";
-import {UserDataGenerator} from "../data-generator/UserDataGenerator";
-import {UserRole} from "../../../src/enum/UserRole";
-import {getRepository} from "typeorm";
+import {sign} from 'jsonwebtoken';
+import {User} from '../../../src/entity/User';
+import {UserDataGenerator} from '../data-generator/UserDataGenerator';
+import {UserRole} from '../../../src/enum/UserRole';
+import {getRepository} from 'typeorm';
+import * as config from 'config';
 
 export class SecurityConfig {
 

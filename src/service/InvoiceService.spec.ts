@@ -1,11 +1,11 @@
-import * as sinon from 'sinon';
-import * as assert from 'assert';
 import { InvoiceRepository } from '../repository/InvoiceRepository';
 import { InvoiceService } from './InvoiceService';
 import { Invoice } from '../entity/Invoice';
 import { Merchandise } from '../entity/Merchandise';
 import { InvoiceStatus } from '../enum/InvoiceStatus';
 import { expect } from 'chai';
+import * as sinon from 'sinon';
+import * as assert from 'assert';
 
 describe('Invoice service', () => {
 

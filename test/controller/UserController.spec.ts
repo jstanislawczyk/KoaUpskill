@@ -1,6 +1,5 @@
 import { Application } from '../../src/config/Application';
 import { assert } from 'chai';
-import * as request from 'supertest';
 import { getRepository } from 'typeorm';
 import { UserRole } from '../../src/enum/UserRole';
 import { User } from '../../src/entity/User';
@@ -12,6 +11,7 @@ import { UserDto } from '../../src/dto/UserDto';
 import { Error } from '../../src/exception/Error';
 import { ErrorDataGenerator } from '../util/data-generator/ErrorDataGenerator';
 import {SecurityConfig} from "../util/security/SecurityConfig";
+import * as request from 'supertest';
 
 const application: Application = new Application();
 

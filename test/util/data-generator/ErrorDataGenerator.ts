@@ -1,4 +1,4 @@
-import { Error } from "../../../src/exception/Error";
+import { Error } from '../../../src/exception/Error';
 
 export class ErrorDataGenerator {
     public static createError(code: number, message: string): Error {

@@ -7,10 +7,10 @@ import {
 import { createConnection, useContainer as useTypeOrmContainer, Connection } from 'typeorm';
 import { Container } from 'typedi';
 import { DatabaseConfig } from './DatabaseConfig';
-import * as config from 'config';
 import { Logger } from './Logger';
 import { LoggerLevel } from '../enum/LoggerLevel';
 import {SecurityConfig} from './SecurityConfig';
+import * as config from 'config';
 
 export class Application {
   public databaseConnection: Connection;

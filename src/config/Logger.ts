@@ -1,6 +1,5 @@
 import { LoggerLevel } from '../enum/LoggerLevel';
-
-const winston = require('winston');
+import * as winston from 'winston';
 
 export class Logger {
 

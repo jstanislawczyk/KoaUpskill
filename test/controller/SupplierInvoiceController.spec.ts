@@ -1,5 +1,4 @@
 import {assert} from 'chai';
-import * as request from 'supertest';
 import {getRepository} from 'typeorm';
 import {Application} from '../../src/config/Application';
 import {Logger} from '../../src/config/Logger';
@@ -15,6 +14,7 @@ import {ErrorDataGenerator} from '../util/data-generator/ErrorDataGenerator';
 import {InvoiceDataGenerator} from '../util/data-generator/InvoiceDataGenerator';
 import {MerchandiseDataGenerator} from '../util/data-generator/MerchandiseDataGenerator';
 import {SupplierDataGenerator} from '../util/data-generator/SupplierDataGenerator';
+import * as request from 'supertest';
 
 const application: Application = new Application();
 
