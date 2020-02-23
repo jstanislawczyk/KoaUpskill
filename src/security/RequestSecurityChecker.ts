@@ -1,11 +1,11 @@
 import {verify} from 'jsonwebtoken';
-import {Action, UnauthorizedError} from 'routing-controllers';
+import {Action} from 'routing-controllers';
 import {JsonWebToken} from '../config/helper/JsonWebToken';
 import {Connection} from 'typeorm';
 import {User} from '../entity/User';
 import * as config from 'config';
 
-export class SecurityChecker {
+export class RequestSecurityChecker {
 
   public static async handleAuthorizationCheckForGivenUser(user: User, roles: string[]): Promise<boolean> {
     const userHasRequiredRole = roles.length === 0 || roles.includes(user.role);

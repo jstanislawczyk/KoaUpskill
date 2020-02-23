@@ -9,7 +9,8 @@ import { Container } from 'typedi';
 import { DatabaseConfig } from './DatabaseConfig';
 import { Logger } from './Logger';
 import { LoggerLevel } from '../enum/LoggerLevel';
-import {SecurityConfig} from './SecurityConfig';
+import {RequestSecurityChecker} from '../security/RequestSecurityChecker';
+import {User} from '../entity/User';
 import * as config from 'config';
 
 export class Application {
@@ -34,8 +35,16 @@ export class Application {
           routePrefix: '/api',
           defaultErrorHandler: false,
           authorizationChecker: async (action: Action, roles: string[]) => {
-            return await SecurityConfig.handleAuthorizationCheck(action, roles, connection);
-          }
+            const userFromToken: User = await RequestSecurityChecker.findUserFromAction(action, connection);
+            action.context.state.actionUser = userFromToken;
+
+            return await RequestSecurityChecker.handleAuthorizationCheckForGivenUser(userFromToken, roles);
+          },
+          currentUserChecker: async (action: Action) => {
+            return action.context.state.actionUser
+                ? action.context.state.actionUser
+                : await RequestSecurityChecker.findUserFromAction(action, connection);
+          },
         });
 
         this.appContext = app.listen(port, () => {
