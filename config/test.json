@@ -4,7 +4,8 @@
         "name": "koajs-test"
     },
     "security": {
-        "secret": "SUPER_SECRET"
+        "secret": "SUPER_SECRET",
+        "hashingRounds": 7
     },
     "db": {
         "host": "localhost",
