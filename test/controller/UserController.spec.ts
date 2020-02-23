@@ -11,6 +11,7 @@ import { UserDataGenerator } from '../util/data-generator/UserDataGenerator';
 import { UserDto } from '../../src/dto/UserDto';
 import { Error } from '../../src/exception/Error';
 import { ErrorDataGenerator } from '../util/data-generator/ErrorDataGenerator';
+import {SecurityConfig} from "../util/security/SecurityConfig";
 
 const application: Application = new Application();
 
@@ -33,31 +34,22 @@ describe('Users controller integration test', () => {
     });
 
     describe('GET /api/users', () => {
-        it('respond with json containing an empty list of users', async () => {
-            return request(application.appContext)
-                .get('/api/users')
-                .set('Accept', 'application/json')
-                .expect('Content-Type', /json/)
-                .expect(200)
-                .then((response: any) => {
-                    assert.deepEqual(response.body, []);
-                })
-        });
-    });
-
-    describe('GET /api/users', () => {
         it('respond with json containing list of users', async () => {
             const firstUser: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
             const secondUser: User = UserDataGenerator.createUser('test2@mail.com', '1qazXSW@', 'Jane', 'Dane', UserRole.ADMIN);
 
-            await getRepository(User).save(firstUser);
+            const savedUser = await getRepository(User).save(firstUser);
             await getRepository(User).save(secondUser);
 
+            const fakeToken = SecurityConfig.createFakeToken(savedUser.id.toHexString());
             const expectedDtoList: UserDto[] = UserDtoConverter.toListOfDtos([firstUser, secondUser]);
             
             return request(application.appContext)
                 .get('/api/users')
-                .set('Accept', 'application/json')
+                .set({
+                    'Authorization': `Bearer ${fakeToken}`,
+                    'Accept': 'application/json',
+                })
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then((response: any) => 
@@ -68,9 +60,14 @@ describe('Users controller integration test', () => {
 
     describe('GET /api/user/{id} NOT FOUND', () => {
         it('respond with message about user not found', async () => {
+            const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
             return request(application.appContext)
                 .get('/api/users/5e445b53a1bc7a2354236a3a')
-                .set('Accept', 'application/json')
+                .set({
+                    'Authorization': `Bearer ${fakeToken}`,
+                    'Accept': 'application/json',
+                })
                 .expect(404)
                 .then((response: any) => {
                     const errorResponse: Error = JSON.parse(response.text);
@@ -83,18 +80,19 @@ describe('Users controller integration test', () => {
 
     describe('GET /api/user/{id}', () => {
         it('respond with json containing user', async () => {
+            const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
             let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
 
-            user = await getRepository(User)
-                .save(user)
-                .then(user => user);
+            user = await getRepository(User).save(user);
 
             const expectedDto: UserDto = UserDtoConverter.toDto(user);
             
             return request(application.appContext)
                 .get(`/api/users/${user.id}`)
-                .set('Accept', 'application/json')
-                .expect('Content-Type', /json/)
+                .set({
+                    'Authorization': `Bearer ${fakeToken}`,
+                    'Accept': 'application/json',
+                })
                 .expect(200)
                 .then((response: any) => 
                     assert.deepEqual(response.body, expectedDto)
@@ -116,7 +114,7 @@ describe('Users controller integration test', () => {
 
     describe('POST /api/user', () => {
         it('respond with json containing saved user', async () => {
-            const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
+            const user: User = UserDataGenerator.createUser('userForSave@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
             const expectedUserDto: UserDto = UserDtoConverter.toDto(user);
             
             return request(application.appContext)
@@ -139,12 +137,16 @@ describe('Users controller integration test', () => {
 
     describe('PATCH /api/user/{id} NOT FOUND', () => {
         it('respond with message about user not found', async () => {
+            const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
             const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
             
             return request(application.appContext)
                 .patch('/api/users/5e445b53a1bc7a2354236a3a')
                 .send(user)
-                .set('Accept', 'application/json')
+                .set({
+                    'Authorization': `Bearer ${fakeToken}`,
+                    'Accept': 'application/json',
+                })
                 .expect(404)
                 .then((response: any) => {
                     const errorResponse: Error = JSON.parse(response.text);
@@ -157,18 +159,23 @@ describe('Users controller integration test', () => {
 
     describe('PATCH /api/user/{id} BAD REQUEST', () => {
         it('respond with message about user bad request', async () => {
+            const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
             const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', '', UserRole.MANAGER);
             
             return request(application.appContext)
                 .patch('/api/users/5e445b53a1bc7a2354236a3a')
                 .send(user)
-                .set('Accept', 'application/json')
+                .set({
+                    'Authorization': `Bearer ${fakeToken}`,
+                    'Accept': 'application/json',
+                })
                 .expect(400);
         });
     });
 
     describe('PATCH /api/user/{id}', () => {
         it('respond with json containing updated user', async () => {
+            const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
             const userBodyForUpdate: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'Jane', 'Test', UserRole.ADMIN);
             let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
 
@@ -182,7 +189,10 @@ describe('Users controller integration test', () => {
             return request(application.appContext)
                 .patch(`/api/users/${user.id}`)
                 .send(userBodyForUpdate)
-                .set('Accept', 'application/json')
+                .set({
+                    'Authorization': `Bearer ${fakeToken}`,
+                    'Accept': 'application/json',
+                })
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .then((response: any) => {
@@ -195,9 +205,14 @@ describe('Users controller integration test', () => {
 
     describe('DELETE /api/user/{id} NOT FOUND', () => {
         it('respond with message about user not found', async () => {
+            const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
             return request(application.appContext)
                 .delete('/api/users/5e445b53a1bc7a2354236a3a')
-                .set('Accept', 'application/json')
+                .set({
+                    'Authorization': `Bearer ${fakeToken}`,
+                    'Accept': 'application/json',
+                })
                 .expect(404)
                 .then((response: any) => {
                     const errorResponse: Error = JSON.parse(response.text);
@@ -210,6 +225,7 @@ describe('Users controller integration test', () => {
 
     describe('DELETE /api/user/{id}', () => {
         it('respond with message about user not found', async () => {
+            const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
             let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
 
             user = await getRepository(User)
@@ -218,7 +234,10 @@ describe('Users controller integration test', () => {
 
             return request(application.appContext)
                 .delete(`/api/users/${user.id}`)
-                .set('Accept', 'application/json')
+                .set({
+                    'Authorization': `Bearer ${fakeToken}`,
+                    'Accept': 'application/json',
+                })
                 .expect(204);
         });
     });
