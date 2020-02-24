@@ -5,7 +5,7 @@ import { UserRepository } from '../repository/UserRepository';
 import { NotFoundError } from 'routing-controllers/http-error/NotFoundError';
 import { DeleteResult } from 'typeorm';
 import {sign} from 'jsonwebtoken';
-import {BadRequestError, UnauthorizedError} from 'routing-controllers';
+import {BadRequestError, ForbiddenError, UnauthorizedError} from 'routing-controllers';
 import {JsonWebToken} from '../config/helper/JsonWebToken';
 import {PasswordHashingUtils} from '../security/PasswordHashingUtils';
 import * as config from 'config';
@@ -64,9 +64,15 @@ export class UserService {
         }
     }
 
-    async updateUser(id: string, newUser: User): Promise<User> {
+    async updateUser(currentRequestUserId: string, updatedUserId: string, newUser: User): Promise<User> {
+        const isUserEditingOtherAccount: boolean = currentRequestUserId !== updatedUserId;
+
+        if (isUserEditingOtherAccount) {
+            throw new ForbiddenError(`Can't update different user`)
+        }
+
         return <User> await this.userRepository
-            .findOne(id)
+            .findOne(updatedUserId)
             .then((userToUpdate: User) => {
                 userToUpdate.firstName = newUser.firstName ? newUser.firstName : userToUpdate.firstName;
                 userToUpdate.lastName = newUser.lastName ? newUser.lastName : userToUpdate.lastName;
@@ -75,7 +81,7 @@ export class UserService {
                 return this.userRepository.save(userToUpdate);
             })
             .catch(() => {
-                throw new NotFoundError(`User with id=${id} not found`)
+                throw new NotFoundError(`User with id=${updatedUserId} not found`)
             });
     }
 

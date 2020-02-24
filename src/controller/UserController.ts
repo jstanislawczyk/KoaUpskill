@@ -8,7 +8,8 @@ import {
    Delete,
    HttpCode,
    NotFoundError,
-   Authorized
+   Authorized,
+   CurrentUser
 } from 'routing-controllers';
 import { User } from '../entity/User';
 import { UserDto } from '../dto/UserDto';
@@ -59,11 +60,16 @@ export class UserController {
 
    @Patch('/:id')
    @Authorized()
-   async updateUser(@Param('id') id: string, @Body({ validate: true }) userDto: UserDto): Promise<UserDto> {
+   async updateUser(
+       @CurrentUser({ required: true}) currentRequestUser: User,
+       @Param('id') newUserId: string,
+       @Body({ validate: true }) userDto: UserDto
+   ): Promise<UserDto> {
       const newUser: User = UserDtoConverter.toEntity(userDto);
+      const currentRequestUserId: string = currentRequestUser.id.toHexString();
 
       return await this.userService
-         .updateUser(id, newUser)
+         .updateUser(currentRequestUserId, newUserId, newUser)
          .then((user: User) => 
             UserDtoConverter.toDto(user)
          );

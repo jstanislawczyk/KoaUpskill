@@ -162,8 +162,8 @@ describe('Users controller integration test', () => {
         });
     });
 
-    describe('PATCH /api/user/{id} NOT FOUND', () => {
-        it('respond with message about user not found', async () => {
+    describe('PATCH /api/user/{id} FORBIDDEN', () => {
+        it('respond with message about forbidden editing other user account', async () => {
             const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
             const user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
             
@@ -174,10 +174,10 @@ describe('Users controller integration test', () => {
                     'Authorization': `Bearer ${fakeToken}`,
                     'Accept': 'application/json',
                 })
-                .expect(404)
+                .expect(403)
                 .then((response: any) => {
                     const errorResponse: Error = JSON.parse(response.text);
-                    const expectedErrorResponse = ErrorDataGenerator.createError(404, 'User with id=5e445b53a1bc7a2354236a3a not found');
+                    const expectedErrorResponse = ErrorDataGenerator.createError(403, `Can't update different user`);
 
                     assert.deepEqual(errorResponse, expectedErrorResponse);
                 });
@@ -216,14 +216,12 @@ describe('Users controller integration test', () => {
 
     describe('PATCH /api/user/{id}', () => {
         it('respond with json containing updated user', async () => {
-            const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
             const userBodyForUpdate: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'Jane', 'Test', UserRole.ADMIN);
             let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
 
-            user = await getRepository(User)
-                .save(user)
-                .then(user => user);
+            user = await getRepository(User).save(user);
 
+            const fakeToken = await SecurityConfig.createFakeToken(user.id.toHexString());
             const expectedDto: UserDto = UserDtoConverter.toDto(userBodyForUpdate);
             expectedDto.id = user.id.toHexString();
             

@@ -51,7 +51,7 @@ describe('Users service', () => {
             sinon.stub(userRepository, 'findOne' as any).resolves(getUser());
             sinon.stub(userRepository, 'save' as any).resolves(updatedUser);
 
-            assert.deepEqual(await userService.updateUser('SomeId', updatedUser), updatedUser);
+            assert.deepEqual(await userService.updateUser('SomeId', 'SomeId', updatedUser), updatedUser);
         });
     });
 
@@ -99,6 +99,8 @@ const getMultipleUsers = (): User[] => {
 
 const getUser = (): User => {
     const user = new User();
+    user.email = 'some@mail.com';
+    user.password = '1qazXSW@';
     user.firstName = 'John';
     user.lastName = 'Doe';
     user.role = UserRole.ADMIN;
