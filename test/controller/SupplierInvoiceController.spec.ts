@@ -38,7 +38,7 @@ describe('Supplier invoice controller integration test', () => {
   });
 
   describe('GET /suppliers/{supplierId}/invoices UNAUTHORIZED', () => {
-    it('respond with empty invoices list', async () => {
+    it('respond with unauthorized exception', async () => {
       let supplier: Supplier = SupplierDataGenerator.createSupplier('TestTest1', '1234567890');
       supplier = await getRepository(Supplier).save(supplier);
 

@@ -39,7 +39,7 @@ describe('Manager invoice controller integration test', () => {
   });
 
   describe('GET /users/{managerId}/invoices UNAUTHORIZED', () => {
-    it('respond with empty invoices list', async () => {
+    it('respond with unauthorized exception', async () => {
       let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
