@@ -15,6 +15,7 @@ import {InvoiceDataGenerator} from '../util/data-generator/InvoiceDataGenerator'
 import {MerchandiseDataGenerator} from '../util/data-generator/MerchandiseDataGenerator';
 import {SupplierDataGenerator} from '../util/data-generator/SupplierDataGenerator';
 import * as request from 'supertest';
+import {SecurityConfig} from "../util/security/SecurityConfig";
 
 const application: Application = new Application();
 
@@ -36,11 +37,28 @@ describe('Supplier invoice controller integration test', () => {
     await application.close();
   });
 
-  describe('GET /suppliers/{supplierId}/invoices NotFound', () => {
+  describe('GET /suppliers/{supplierId}/invoices UNAUTHORIZED', () => {
+    it('respond with empty invoices list', async () => {
+      let supplier: Supplier = SupplierDataGenerator.createSupplier('TestTest1', '1234567890');
+      supplier = await getRepository(Supplier).save(supplier);
+
+      return request(application.appContext)
+          .get(`/api/suppliers/${supplier.id}/invoices`)
+          .set('Accept', 'application/json')
+          .expect(401);
+    });
+  });
+
+  describe('GET /suppliers/{supplierId}/invoices NOT FOUND', () => {
     it('respond with supplier not found error', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
       return await request(application.appContext)
         .get('/api/suppliers/NotExistingManagerId/invoices')
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(404)
         .then((response: any) => {
           const errorResponse: Error = JSON.parse(response.text);
@@ -51,23 +69,28 @@ describe('Supplier invoice controller integration test', () => {
     });
   });
 
-  describe('GET /suppliers/{supplierId}/invoices empty', () => {
+  describe('GET /suppliers/{supplierId}/invoices EMPTY', () => {
     it('respond with empty invoices list', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
       let supplier: Supplier = SupplierDataGenerator.createSupplier('TestTest1', '1234567890');
       supplier = await getRepository(Supplier).save(supplier);
 
       return await request(application.appContext)
-        .get(`/api/suppliers/${supplier.id}/invoices`)
-        .set('Accept', 'application/json')
-        .expect(200)
-        .then((response: any) => {
-          assert.deepEqual(response.body, []);
-        });
+          .get(`/api/suppliers/${supplier.id}/invoices`)
+          .set({
+            'Authorization': `Bearer ${fakeToken}`,
+            'Accept': 'application/json',
+          })
+          .expect(200)
+          .then((response: any) => {
+            assert.deepEqual(response.body, []);
+          });
     });
   });
 
   describe('GET /suppliers/{supplierId}/invoices', () => {
     it('respond with invoices list', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
       const merchandises: Merchandise[] = [
         MerchandiseDataGenerator.createMerchandise('TEST1', 13.33, 12),
         MerchandiseDataGenerator.createMerchandise('TEST2', 33.33, 5),
@@ -86,7 +109,10 @@ describe('Supplier invoice controller integration test', () => {
 
       return await request(application.appContext)
         .get(`/api/suppliers/${supplier.id}/invoices`)
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(200)
         .then((response: any) => {
           assert.deepEqual(response.body, savedInvoicesDto);
