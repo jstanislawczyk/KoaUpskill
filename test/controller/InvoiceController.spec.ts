@@ -18,6 +18,7 @@ import {MerchandiseDataGenerator} from '../util/data-generator/MerchandiseDataGe
 import {SupplierDataGenerator} from '../util/data-generator/SupplierDataGenerator';
 import {UserDataGenerator} from '../util/data-generator/UserDataGenerator';
 import * as request from 'supertest';
+import {SecurityConfig} from "../util/security/SecurityConfig";
 
 const application: Application = new Application();
 
@@ -39,11 +40,25 @@ describe('Users controller integration test', () => {
     await application.close();
   });
 
-  describe('GET /api/invoices empty', () => {
-    it('respond with json containing an empty list of invoices', async () => {
+  describe('GET /api/invoices UNAUTHORIZED', () => {
+    it('respond with unauthorized exception', async () => {
       return request(application.appContext)
         .get('/api/invoices')
         .set('Accept', 'application/json')
+        .expect(401);
+    });
+  });
+
+  describe('GET /api/invoices EMPTY', () => {
+    it('respond with json containing an empty list of invoices', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
+      return request(application.appContext)
+        .get('/api/invoices')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect('Content-Type', /json/)
         .expect(200)
         .then((response: any) => {
@@ -54,6 +69,8 @@ describe('Users controller integration test', () => {
 
   describe('GET /api/invoices', () => {
     it('respond with json containing an empty list of invoices', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
       const firstMerchandises: Merchandise[] = [
         MerchandiseDataGenerator.createMerchandise('TEST1', 13.33, 12),
         MerchandiseDataGenerator.createMerchandise('TEST2', 33.33, 5),
@@ -75,7 +92,10 @@ describe('Users controller integration test', () => {
 
       return request(application.appContext)
         .get('/api/invoices')
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect('Content-Type', /json/)
         .expect(200)
         .then((response: any) => {
@@ -92,27 +112,42 @@ describe('Users controller integration test', () => {
           assert.equal(response.body[1].status, invoicesDto[1].status);
           assert.equal(response.body[1].dateOfInvoice, invoicesDto[1].dateOfInvoice);
           assert.deepEqual(response.body[1].merchandises, invoicesDto[1].merchandises);
-        })
+        });
     });
   });
 
-  describe('GET /api/invoices/{id} NotFound', () => {
-    it('respond with invoice not found error', async () => {
+  describe('GET /api/invoices/{id} UNAUTHORIZED', () => {
+    it('respond with unauthorized exception', async () => {
       return request(application.appContext)
         .get(`/api/invoices/5e445b53a1bc7a2354236a3a`)
         .set('Accept', 'application/json')
+        .expect(401);
+    });
+  });
+
+  describe('GET /api/invoices/{id} NOT FOUND', () => {
+    it('respond with invoice not found error', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
+      return request(application.appContext)
+        .get(`/api/invoices/5e445b53a1bc7a2354236a3a`)
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(404)
         .then((response: any) => {
           const errorResponse: Error = JSON.parse(response.text);
           const expectedErrorResponse = ErrorDataGenerator.createError(404, 'Invoice with id=5e445b53a1bc7a2354236a3a not found');
 
           assert.deepEqual(errorResponse, expectedErrorResponse);
-        })
+        });
     });
   });
 
   describe('GET /api/invoices/{id}', () => {
     it('respond with invoice json', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
       const merchandises: Merchandise[] = [
         MerchandiseDataGenerator.createMerchandise('TEST1', 13.33, 12),
         MerchandiseDataGenerator.createMerchandise('TEST2', 33.33, 5),
@@ -126,7 +161,10 @@ describe('Users controller integration test', () => {
 
       return request(application.appContext)
         .get(`/api/invoices/${savedInvoice.id}`)
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect('Content-Type', /json/)
         .expect(200)
         .then((response: any) => {
@@ -136,12 +174,31 @@ describe('Users controller integration test', () => {
           assert.equal(response.body.status, invoiceDto.status);
           assert.equal(response.body.dateOfInvoice, invoiceDto.dateOfInvoice);
           assert.deepEqual(response.body.merchandises, invoiceDto.merchandises);
-        })
+        });
     });
   });
 
-  describe('POST /api/invoices BadRequest', () => {
+  describe('POST /api/invoices UNAUTHORIZED', () => {
+    it('respond with unauthorized exception', async () => {
+      const merchandises: Merchandise[] = [
+        MerchandiseDataGenerator.createMerchandise('TEST1', 13.33, 12),
+        MerchandiseDataGenerator.createMerchandise('TEST2', 33.33, 5),
+      ];
+
+      const invoice: Invoice = InvoiceDataGenerator.createInvoiceWithNoSupplier(
+            'ManagerId1', InvoiceStatus.ACCEPTED, new Date(2016, 1, 3), merchandises);
+
+      return request(application.appContext)
+        .post('/api/invoices')
+        .send(invoice)
+        .set('Accept', 'application/json')
+        .expect(401);
+    });
+  });
+
+  describe('POST /api/invoices BAD REQUEST', () => {
     it('respond with validation error', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
       const merchandises: Merchandise[] = [
         MerchandiseDataGenerator.createMerchandise('TEST1', 13.33, 12),
         MerchandiseDataGenerator.createMerchandise('TEST2', 33.33, 5),
@@ -153,13 +210,17 @@ describe('Users controller integration test', () => {
       return request(application.appContext)
         .post('/api/invoices')
         .send(invoice)
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(400);
     });
   });
 
   describe('POST /api/invoices', () => {
     it('respond with JSON containing saved invoice', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
       let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
@@ -177,7 +238,10 @@ describe('Users controller integration test', () => {
       return request(application.appContext)
         .post('/api/invoices')
         .send(invoiceDto)
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(201)
         .then((response: any) => {
           assert.isNotNull(response.body.id);
@@ -190,8 +254,9 @@ describe('Users controller integration test', () => {
     });
   });
 
-  describe('POST /api/invoices NotFound Manager', () => {
+  describe('POST /api/invoices NOT FOUND Manager', () => {
     it('respond with validation error', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
       let supplier: Supplier = SupplierDataGenerator.createSupplier('TestTest1', '1234567890');
       supplier = await getRepository(Supplier).save(supplier);
 
@@ -206,7 +271,10 @@ describe('Users controller integration test', () => {
       return request(application.appContext)
         .post('/api/invoices')
         .send(invoice)
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(404)
         .then((response: any) => {
           const errorResponse: Error = JSON.parse(response.text);
@@ -217,8 +285,9 @@ describe('Users controller integration test', () => {
     });
   });
 
-  describe('POST /api/invoices NotFound Supplier', () => {
+  describe('POST /api/invoices NOT FOUND Supplier', () => {
     it('respond with validation error', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
       let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
@@ -233,7 +302,10 @@ describe('Users controller integration test', () => {
       return request(application.appContext)
         .post('/api/invoices')
         .send(invoice)
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(404)
         .then((response: any) => {
           const errorResponse: Error = JSON.parse(response.text);

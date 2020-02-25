@@ -1,5 +1,5 @@
 import { InvoiceService } from '../service/InvoiceService';
-import { JsonController, Post, Body, Get, NotFoundError, Param, HttpCode } from 'routing-controllers';
+import {JsonController, Post, Body, Get, NotFoundError, Param, HttpCode, Authorized} from 'routing-controllers';
 import { Invoice } from '../entity/Invoice';
 import { InvoiceDtoConverter } from '../dto-converter/InvoiceDtoConverter';
 import { InvoiceDto } from '../dto/InvoiceDto';
@@ -17,6 +17,7 @@ export class InvoiceController {
     }
 
     @Get()
+    @Authorized()
     async getAllInvoices(): Promise<InvoiceDto[]> {
         return await this.invoiceService.getAllInvoices()
             .then(invoices => 
@@ -25,6 +26,7 @@ export class InvoiceController {
     }
 
     @Get('/:id')
+    @Authorized()
     async getInvoiceById(@Param('id') id: string): Promise<InvoiceDto> {
         return await this.invoiceService.getInvoiceById(id)
             .then(invoice => 
@@ -36,6 +38,7 @@ export class InvoiceController {
     }
 
     @Post()
+    @Authorized()
     @HttpCode(201)
     async saveInvoice(@Body({ validate: true }) invoiceDto: InvoiceDto): Promise<InvoiceDto> {
         const invoice: Invoice = InvoiceDtoConverter.toEntity(invoiceDto);
