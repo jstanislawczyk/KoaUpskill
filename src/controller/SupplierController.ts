@@ -1,4 +1,15 @@
-import { JsonController, Param, Body, Get, Post, Patch, Delete, HttpCode, NotFoundError } from 'routing-controllers';
+import {
+    JsonController,
+    Param,
+    Body,
+    Get,
+    Post,
+    Patch,
+    Delete,
+    HttpCode,
+    NotFoundError,
+    Authorized
+} from 'routing-controllers';
 import { DeleteResult } from 'typeorm';
 import { SupplierService } from '../service/SupplierService';
 import { Supplier } from '../entity/Supplier';
@@ -12,7 +23,8 @@ export class SupplierController {
     }
 
     @Get()
-    async getAllUsers(): Promise<SupplierDto[]> {
+    @Authorized()
+    async getAllSuppliers(): Promise<SupplierDto[]> {
         return await this.supplierService
             .getAllSuppliers()
             .then((suppliers: Supplier[]) => 
@@ -21,7 +33,8 @@ export class SupplierController {
     }
 
     @Get('/:id')
-    async findOneUser(@Param('id') id: string): Promise<SupplierDto> {
+    @Authorized()
+    async findOneSupplier(@Param('id') id: string): Promise<SupplierDto> {
         return await this.supplierService
             .findOneSupplier(id)
             .then((supplier: Supplier) => 
@@ -33,8 +46,9 @@ export class SupplierController {
     }
 
     @Post()
+    @Authorized()
     @HttpCode(201)
-    async saveUser(@Body({ validate: true }) supplierDto: SupplierDto): Promise<SupplierDto> {
+    async saveSupplier(@Body({ validate: true }) supplierDto: SupplierDto): Promise<SupplierDto> {
         const supplier: Supplier = SupplierDtoConverter.toEntity(supplierDto);
 
         return await this.supplierService
@@ -45,7 +59,8 @@ export class SupplierController {
     }
 
     @Patch('/:id')
-    async updateUser(@Param('id') id: string, @Body({ validate: true }) supplierDto: SupplierDto): Promise<SupplierDto> {
+    @Authorized()
+    async updateSupplier(@Param('id') id: string, @Body({ validate: true }) supplierDto: SupplierDto): Promise<SupplierDto> {
         const newUser: Supplier = SupplierDtoConverter.toEntity(supplierDto);
 
         return await this.supplierService
@@ -56,6 +71,7 @@ export class SupplierController {
     }
 
     @Delete('/:id')
+    @Authorized()
     @HttpCode(204)
     async deleteUser(@Param('id') id: string): Promise<DeleteResult> {
         return await this.supplierService
