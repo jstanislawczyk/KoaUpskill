@@ -16,6 +16,7 @@ import {InvoiceDataGenerator} from '../util/data-generator/InvoiceDataGenerator'
 import {MerchandiseDataGenerator} from '../util/data-generator/MerchandiseDataGenerator';
 import {UserDataGenerator} from '../util/data-generator/UserDataGenerator';
 import * as request from 'supertest';
+import {SecurityConfig} from "../util/security/SecurityConfig";
 
 const application: Application = new Application();
 
@@ -37,11 +38,28 @@ describe('Manager invoice controller integration test', () => {
     await application.close();
   });
 
-  describe('GET /users/{managerId}/invoices NotFound', () => {
+  describe('GET /users/{managerId}/invoices UNAUTHORIZED', () => {
+    it('respond with empty invoices list', async () => {
+      let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
+      user = await getRepository(User).save(user);
+
+      return request(application.appContext)
+          .get(`/api/users/${user.id}/invoices`)
+          .set('Accept', 'application/json')
+          .expect(401);
+    });
+  });
+
+  describe('GET /users/{managerId}/invoices NOT FOUND', () => {
     it('respond with manager not found error', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
       return await request(application.appContext)
         .get('/api/users/NotExistingManagerId/invoices')
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(404)
         .then((response: any) => {
           const errorResponse: Error = JSON.parse(response.text);
@@ -52,14 +70,19 @@ describe('Manager invoice controller integration test', () => {
     });
   });
 
-  describe('GET /users/{managerId}/invoices empty', () => {
+  describe('GET /users/{managerId}/invoices EMPTY', () => {
     it('respond with empty invoices list', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
       let user: User = UserDataGenerator.createUser('test@mail.com', '1qazXSW@', 'John', 'Doe', UserRole.MANAGER);
       user = await getRepository(User).save(user);
 
       return await request(application.appContext)
         .get(`/api/users/${user.id}/invoices`)
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(200)
         .then((response: any) => {
           assert.deepEqual(response.body, []);
@@ -69,6 +92,8 @@ describe('Manager invoice controller integration test', () => {
 
   describe('GET /users/{managerId}/invoices', () => {
     it('respond with invoices list', async () => {
+      const fakeToken = await SecurityConfig.createFakeTokenWithoutUser();
+
       const merchandises: Merchandise[] = [
         MerchandiseDataGenerator.createMerchandise('TEST1', 13.33, 12),
         MerchandiseDataGenerator.createMerchandise('TEST2', 33.33, 5),
@@ -87,7 +112,10 @@ describe('Manager invoice controller integration test', () => {
 
       return await request(application.appContext)
         .get(`/api/users/${user.id}/invoices`)
-        .set('Accept', 'application/json')
+        .set({
+          'Authorization': `Bearer ${fakeToken}`,
+          'Accept': 'application/json',
+        })
         .expect(200)
         .then((response: any) => {
           assert.deepEqual(response.body, savedInvoicesDto);

@@ -1,5 +1,5 @@
 import { InvoiceService } from '../service/InvoiceService';
-import { JsonController, Get, NotFoundError, Param } from 'routing-controllers';
+import {JsonController, Get, NotFoundError, Param, Authorized} from 'routing-controllers';
 import { InvoiceDtoConverter } from '../dto-converter/InvoiceDtoConverter';
 import { InvoiceDto } from '../dto/InvoiceDto';
 import { UserService } from '../service/UserService';
@@ -14,6 +14,7 @@ export class InvoiceController {
     }
 
     @Get('/:managerId/invoices')
+    @Authorized()
     async getAllSupplierInvoices(@Param('managerId') managerId: string): Promise<InvoiceDto[]> {
         await this.userService.findOneUser(managerId)
             .catch(() => {
