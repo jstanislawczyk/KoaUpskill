@@ -47,17 +47,15 @@ describe('Security controller integration test', () => {
 
     describe('POST /security/login UNAUTHORIZED', () => {
         it('respond with login failed (wrong data)', async () => {
-            let user: User = UserDataGenerator.createUser('test@mail.com', 'SomePassword111@', 'John', 'Doe', UserRole.MANAGER);
-            user = await getRepository(User).save(user);
+            const user: User = UserDataGenerator.createUser('test@mail.com', 'SomePassword111@', 'John', 'Doe', UserRole.MANAGER);
+            await getRepository(User).save(user);
 
             const userAuthentication: UserAuthenticationDto =
                 UserAuthenticationDataGenerator.createUserAuthentication('test@mail.com', '1qazXSW@');
 
             return await request(application.appContext)
                 .post('/api/security/login')
-                .set({
-                    'Accept': 'application/json',
-                })
+                .set('Accept', 'application/json')
                 .send(userAuthentication)
                 .expect(401)
                 .then((response: any) => {
@@ -80,9 +78,7 @@ describe('Security controller integration test', () => {
 
             return await request(application.appContext)
                 .post('/api/security/login')
-                .set({
-                    'Accept': 'application/json',
-                })
+                .set('Accept', 'application/json')
                 .send(userAuthenticationDto)
                 .expect(200)
                 .then((response: any) => {
