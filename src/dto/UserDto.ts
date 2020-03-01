@@ -1,6 +1,5 @@
 import {validateOrReject, Length, IsEnum, IsEmail, Validate} from 'class-validator';
 import {UserRole} from '../enum/UserRole';
-import {PasswordValidator} from '../validator/PasswordValidator';
 
 export class UserDto {
 
@@ -9,7 +8,6 @@ export class UserDto {
     @IsEmail()
     email: string;
 
-    @Validate(PasswordValidator)
     password: string;
 
     @Length(2, 60)
