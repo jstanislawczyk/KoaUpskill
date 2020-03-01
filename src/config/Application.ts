@@ -11,6 +11,7 @@ import { Logger } from './Logger';
 import { LoggerLevel } from '../enum/LoggerLevel';
 import {RequestSecurityChecker} from '../security/RequestSecurityChecker';
 import {User} from '../entity/User';
+import {SwaggerConfig} from './SwaggerConfig';
 import * as config from 'config';
 
 export class Application {
@@ -32,7 +33,6 @@ export class Application {
         const app = createKoaServer({
           controllers: [__dirname + '/../controller/*.ts'],
           middlewares: [__dirname + '/../middleware/*.ts'],
-          routePrefix: '/api',
           defaultErrorHandler: false,
           authorizationChecker: async (action: Action, roles: string[]) => {
             const userFromToken: User = await RequestSecurityChecker.findUserFromAction(action, connection);
@@ -46,6 +46,8 @@ export class Application {
                 : await RequestSecurityChecker.findUserFromAction(action, connection);
           },
         });
+
+        app.use(SwaggerConfig.getSwaggerConfig());
 
         this.appContext = app.listen(port, () => {
           Logger.log(`${appName} server runs on port ${port}`);
