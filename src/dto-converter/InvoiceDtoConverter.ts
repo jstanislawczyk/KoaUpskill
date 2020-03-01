@@ -1,5 +1,5 @@
-import { Invoice } from "../entity/Invoice";
-import { InvoiceDto } from "../dto/InvoiceDto";
+import { Invoice } from '../entity/Invoice';
+import { InvoiceDto } from '../dto/InvoiceDto';
 
 export class InvoiceDtoConverter {
 

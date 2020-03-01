@@ -1,5 +1,5 @@
-import { Supplier } from "../../../src/entity/Supplier";
-import { SupplierDto } from "../../../src/dto/SupplierDto";
+import { Supplier } from '../../../src/entity/Supplier';
+import { SupplierDto } from '../../../src/dto/SupplierDto';
 
 export class SupplierDataGenerator {
     public static createSupplier(name: string, nip: string): Supplier {

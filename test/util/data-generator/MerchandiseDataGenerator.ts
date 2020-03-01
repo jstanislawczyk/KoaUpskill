@@ -1,4 +1,4 @@
-import { Merchandise } from "../../../src/entity/Merchandise";
+import { Merchandise } from '../../../src/entity/Merchandise';
 
 export class MerchandiseDataGenerator {
     public static createMerchandise(name: string, price: number, quantity: number): Merchandise {

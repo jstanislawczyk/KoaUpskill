@@ -1,5 +1,5 @@
 import { BeforeInsert, BeforeUpdate } from 'typeorm';
-import { validateOrReject, IsDefined, Length, } from 'class-validator';
+import { validateOrReject, IsDefined, Length } from 'class-validator';
 
 export class Merchandise {
 

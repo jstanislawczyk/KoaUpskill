@@ -1,11 +1,17 @@
 import 'reflect-metadata';
-import { createKoaServer, useContainer } from 'routing-controllers';
+import {
+  Action,
+  createKoaServer,
+  useContainer
+} from 'routing-controllers';
 import { createConnection, useContainer as useTypeOrmContainer, Connection } from 'typeorm';
 import { Container } from 'typedi';
 import { DatabaseConfig } from './DatabaseConfig';
-import * as config from 'config';
 import { Logger } from './Logger';
 import { LoggerLevel } from '../enum/LoggerLevel';
+import {RequestSecurityChecker} from '../security/RequestSecurityChecker';
+import {User} from '../entity/User';
+import * as config from 'config';
 
 export class Application {
   public databaseConnection: Connection;
@@ -18,7 +24,7 @@ export class Application {
     useTypeOrmContainer(Container);
 
     await createConnection(databaseConfig)
-      .then(async connection => {
+      .then(async (connection: Connection) => {
         this.databaseConnection = connection;
 
         const port = config.get('app.port');
@@ -28,6 +34,17 @@ export class Application {
           middlewares: [__dirname + '/../middleware/*.ts'],
           routePrefix: '/api',
           defaultErrorHandler: false,
+          authorizationChecker: async (action: Action, roles: string[]) => {
+            const userFromToken: User = await RequestSecurityChecker.findUserFromAction(action, connection);
+            action.context.state.actionUser = userFromToken;
+
+            return await RequestSecurityChecker.handleAuthorizationCheckForGivenUser(userFromToken, roles);
+          },
+          currentUserChecker: async (action: Action) => {
+            return action.context.state.actionUser
+                ? action.context.state.actionUser
+                : await RequestSecurityChecker.findUserFromAction(action, connection);
+          },
         });
 
         this.appContext = app.listen(port, () => {

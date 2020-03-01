@@ -3,6 +3,10 @@
         "port": 3000,
         "name": "koajs"
     },
+    "security": {
+        "secret": "SUPER_SECRET",
+        "hashingRounds": 7
+    },
     "db": {
         "host": "localhost",
         "port": 27017,

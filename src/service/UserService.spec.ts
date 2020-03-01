@@ -1,9 +1,10 @@
-import * as sinon from 'sinon';
 import { UserService } from './UserService';
 import { UserRepository } from '../repository/UserRepository';
-import * as assert from 'assert';
 import { User } from '../entity/User';
 import { UserRole } from '../enum/UserRole';
+import {expect} from "chai";
+import * as sinon from 'sinon';
+import * as assert from 'assert';
 
 describe('Users service', () => {
     let userRepository: UserRepository = new UserRepository();
@@ -39,7 +40,10 @@ describe('Users service', () => {
     });
 
     describe('updateUser()', () => {
-        it('Should update user', async () => {const updatedUser: User = getUser();
+        it('Should update user', async () => {
+            const updatedUser: User = getUser();
+            updatedUser.email = 'test@mail.com';
+            updatedUser.password = 'somePass';
             updatedUser.firstName = 'UpdatedFirstName';
             updatedUser.lastName = 'UpdatedLastName';
             updatedUser.role = UserRole.MANAGER;
@@ -47,19 +51,44 @@ describe('Users service', () => {
             sinon.stub(userRepository, 'findOne' as any).resolves(getUser());
             sinon.stub(userRepository, 'save' as any).resolves(updatedUser);
 
-            assert.deepEqual(await userService.updateUser('SomeId', updatedUser), updatedUser);
+            assert.deepEqual(await userService.updateUser('SomeId', 'SomeId', updatedUser), updatedUser);
         });
     });
 
     describe('saveUser()', () => {
-        it('Should save user', async () => {const updatedUser: User = getUser();
-            updatedUser.firstName = 'SavedFirstName';
-            updatedUser.lastName = 'SavedLastName';
-            updatedUser.role = UserRole.MANAGER;
+        it('Should save user', async () => {
+            const userForSave: User = getUser();
+            userForSave.email = 'test@mail.com';
+            userForSave.password = 'somePass';
+            userForSave.firstName = 'SavedFirstName';
+            userForSave.lastName = 'SavedLastName';
+            userForSave.role = UserRole.MANAGER;
 
-            sinon.stub(userRepository, 'save' as any).resolves(updatedUser);
+            sinon.stub(userRepository, 'findUserByEmail' as any).resolves(undefined);
+            sinon.stub(userRepository, 'save' as any).resolves(userForSave);
 
-            assert.deepEqual(await userService.saveUser(updatedUser), updatedUser);
+            assert.deepEqual(await userService.saveUser(userForSave), userForSave);
+        });
+    });
+
+    describe('saveUser() should fail', () => {
+        it('Should not save user if email is already in use', async () => {
+            const userForSave: User = getUser();
+            userForSave.email = 'test@mail.com';
+            userForSave.password = 'somePass';
+            userForSave.firstName = 'SavedFirstName';
+            userForSave.lastName = 'SavedLastName';
+            userForSave.role = UserRole.MANAGER;
+
+            sinon.stub(userRepository, 'findOne' as any).resolves(userForSave);
+            sinon.stub(userRepository, 'save' as any).resolves(userForSave);
+
+            try {
+                await userService.saveUser(userForSave)
+                expect.fail();
+            } catch (error) {
+
+            }
         });
     });
 });
@@ -70,6 +99,8 @@ const getMultipleUsers = (): User[] => {
 
 const getUser = (): User => {
     const user = new User();
+    user.email = 'some@mail.com';
+    user.password = '1qazXSW@';
     user.firstName = 'John';
     user.lastName = 'Doe';
     user.role = UserRole.ADMIN;

@@ -1,8 +1,8 @@
-import * as sinon from 'sinon';
-import * as assert from 'assert';
 import { Supplier } from '../entity/Supplier';
 import { SupplierRepository } from '../repository/SupplierRepository';
 import { SupplierService } from './SupplierService';
+import * as sinon from 'sinon';
+import * as assert from 'assert';
 
 describe('Supplier service', () => {
     let supplierRepository: SupplierRepository;

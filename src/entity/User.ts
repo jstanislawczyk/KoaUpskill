@@ -1,12 +1,28 @@
 import { Entity, Column, ObjectID, ObjectIdColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { validateOrReject, IsDefined, Length, IsEnum } from 'class-validator';
+import {
+  validateOrReject,
+  IsDefined,
+  Length,
+  IsEnum,
+  IsEmail,
+  Validate
+} from 'class-validator';
 import { UserRole } from '../enum/UserRole';
+import {PasswordValidator} from '../validator/PasswordValidator';
 
 @Entity()
 export class User {
 
   @ObjectIdColumn()
   id: ObjectID;
+
+  @Column()
+  @IsEmail()
+  email: string;
+
+  @Column()
+  @Validate(PasswordValidator)
+  password: string;
   
   @Column()
   @IsDefined()

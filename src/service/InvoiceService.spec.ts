@@ -1,11 +1,11 @@
-import * as sinon from 'sinon';
-import * as assert from 'assert';
 import { InvoiceRepository } from '../repository/InvoiceRepository';
 import { InvoiceService } from './InvoiceService';
 import { Invoice } from '../entity/Invoice';
 import { Merchandise } from '../entity/Merchandise';
 import { InvoiceStatus } from '../enum/InvoiceStatus';
 import { expect } from 'chai';
+import * as sinon from 'sinon';
+import * as assert from 'assert';
 
 describe('Invoice service', () => {
 
@@ -42,7 +42,7 @@ describe('Invoice service', () => {
     });
 
     describe('getInvoiceById() should fail', () => {
-        it('Should find one invoice', async () => {
+        it('Should not find one invoice', async () => {
             sinon.stub(invoiceRepository, 'findOne' as any).rejects(new Error());
 
             try { 

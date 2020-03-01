@@ -6,11 +6,11 @@ import { Invoice } from '../entity/Invoice';
 @EntityRepository(Invoice)
 export class InvoiceRepository extends MongoRepository<Invoice>  {
 
-    findAllBySupplier(supplierId: string) {
+    findAllBySupplier(supplierId: string): Promise<Invoice[]> {
         return this.find({ supplierId: supplierId });
     }
 
-    findAllByManager(managerId: string) {
+    findAllByManager(managerId: string): Promise<Invoice[]> {
         return this.find({ managerId: managerId });
     }
 }
