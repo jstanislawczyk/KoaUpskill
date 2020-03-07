@@ -6,7 +6,7 @@ import { InvoiceDto } from '../dto/InvoiceDto';
 import { SupplierService } from '../service/SupplierService';
 import { UserService } from '../service/UserService';
 
-@JsonController('/invoices')
+@JsonController('/api/invoices')
 export class InvoiceController {
 
     constructor(

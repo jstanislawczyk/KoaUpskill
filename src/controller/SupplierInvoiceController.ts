@@ -4,7 +4,7 @@ import { InvoiceDtoConverter } from '../dto-converter/InvoiceDtoConverter';
 import { InvoiceDto } from '../dto/InvoiceDto';
 import { SupplierService } from '../service/SupplierService';
 
-@JsonController('/suppliers')
+@JsonController('/api/suppliers')
 export class InvoiceController {
 
     constructor(

@@ -2,7 +2,7 @@ import {Body, JsonController, Post} from 'routing-controllers';
 import {UserAuthenticationDto} from '../dto/UserAuthenticationDto';
 import {UserService} from '../service/UserService';
 
-@JsonController('/security')
+@JsonController('/api/security')
 export class SecurityController {
 
   constructor(private readonly userService: UserService) {

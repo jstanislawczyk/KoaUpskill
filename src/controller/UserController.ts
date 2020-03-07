@@ -16,8 +16,9 @@ import { UserDto } from '../dto/UserDto';
 import { UserService } from '../service/UserService';
 import { UserDtoConverter } from '../dto-converter/UserDtoConverter';
 import { DeleteResult } from 'typeorm';
+import { OpenAPI } from 'routing-controllers-openapi'
 
-@JsonController('/users')
+@JsonController('/api/users')
 export class UserController {
 
    constructor(private readonly userService: UserService) {
@@ -25,6 +26,13 @@ export class UserController {
 
    @Get()
    @Authorized()
+   @OpenAPI({
+      description: 'Get all users',
+      responses: {
+         '200': { description: 'OK' },
+         '401': { description: 'UNAUTHORIZED' },
+      }
+   })
    async getAllUsers(): Promise<UserDto[]> {
       return await this.userService
          .getAllUsers()
@@ -35,6 +43,14 @@ export class UserController {
 
    @Get('/:id')
    @Authorized()
+   @OpenAPI({
+      description: 'Get single user',
+      responses: {
+         '200': { description: 'OK' },
+         '401': { description: 'UNAUTHORIZED' },
+         '404': { description: 'NOT FOUND' },
+      }
+   })
    async findOneUser(@Param('id') id: string): Promise<UserDto> {
       return await this.userService
          .findOneUser(id)
